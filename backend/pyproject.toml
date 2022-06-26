@@ -3,10 +3,18 @@ name = "backend"
 version = "0.1.0"
 description = ""
 authors = ["Stanislav <sta-tun-slav@yandex.ru>"]
+packages = [
+    { include = "./src" },
+]
+
+[tool.poetry.scripts]
+run_server = "src.main:runner"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 Flask = "^2.1.2"
+Flask-Cors = "^3.0.10"
+importlib-metadata = "^4.12.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
