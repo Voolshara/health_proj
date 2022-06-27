@@ -33,8 +33,8 @@
               / После окончания всех этапов метода по восстановлению вам будут
               выданы товары защищающие вас от повреждений.
             </p>
-            <a href="terms-ru.html" class="site-btn2" style="margin: auto"
-              >Начать</a
+            <router-link to="/ru/terms/" class="site-btn2" style="margin: auto"
+              >Начать</router-link
             >
           </div>
           <div class="col-md-6 top_30">
@@ -46,8 +46,8 @@
               method — you will receive goods\devices to protect you from
               damages and our method to recover.
             </p>
-            <a href="terms-en.html" class="site-btn2" style="margin: auto"
-              >Start</a
+            <router-link to="/en/terms/" class="site-btn2" style="margin: auto"
+              >Start</router-link
             >
           </div>
         </div>

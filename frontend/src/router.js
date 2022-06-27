@@ -5,6 +5,14 @@ const routes = [
     path: "/",
     component: () => import("@/routes/main.vue"),
   },
+  {
+    path: "/:lang/terms",
+    component: () => import("@/routes/terms.vue"),
+  },
+  {
+    path: "/form1",
+    component: () => import("@/routes/first_form.vue"),
+  },
 ];
 
 // 3. Create the router instance and pass the `routes` option
