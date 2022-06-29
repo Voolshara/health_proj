@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
-    <p>Заполните анкету</p>
-    <el-form :model="form" label-width="200px">
+  <div class="container-form">
+    <p class="main-par">Заполните анкету</p>
+    <el-form :model="form" label-width="200px" class="form">
       <el-form-item> Введите данные </el-form-item>
       <el-form-item label="ФИО">
-        <el-input v-model="form.fio" />
+        <el-input v-model="form.fio" placeholder="ФИО" />
       </el-form-item>
       <el-form-item label="Дата Рождения">
         <el-date-picker
@@ -37,31 +37,190 @@
       </el-form-item>
       <el-form-item>Введите номер телефона</el-form-item>
       <el-form-item label="Телефон">
-        <el-input v-model="form.phone" />
+        <el-input v-model="form.phone" placeholder="Телефон" />
       </el-form-item>
-      <el-form-item label="Телефон">
-        <el-input v-model="form.phone" />
-      </el-form-item>
-      <el-form-item label="У вас был инсульт">
+      <el-form-item label="У вас был инсульт ?">
         <el-radio-group v-model="form.stroke">
-          <el-radio label="1" size="large" border>Да</el-radio>
-          <el-radio label="0" size="large" border>Нет</el-radio>
+          <el-radio :label="true" size="large" border>Да</el-radio>
+          <el-radio :label="false" size="large" border>Нет</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="Вид инсульта" v-if="form.stroke[0] == '1'">
-        <el-radio-group v-model="form.type_of_stroke">
-          <el-radio label="Ишемический" size="large" border
-            >Ишемический</el-radio
+      <div v-if="form.stroke">
+        <el-form-item label="Вид инсульта">
+          <el-radio-group v-model="form.type_of_stroke">
+            <el-radio label="Ишемический" size="large" border
+              >Ишемический</el-radio
+            >
+            <el-radio label="Геморрагический" size="large" border
+              >Геморрагический</el-radio
+            >
+            <el-radio label="Другое" size="large" border>Другое</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item> Когда у вас произошёл инсульт? </el-form-item>
+        <el-form-item label="Дата">
+          <el-date-picker
+            v-model="form.date_of_stroke"
+            type="date"
+            placeholder="Pick a date"
+            style="width: 100%"
+          />
+        </el-form-item>
+        <el-form-item label="Вы знаете причину?">
+          <el-radio-group v-model="form.know_reason">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>Пациент воспринимает какую-либо информацию?</el-form-item>
+        <el-form-item label="Укажите %">
+          <el-select
+            v-model="form.percent_of_information"
+            placeholder="Указананный уровень"
           >
-          <el-radio label="Геморрагический" size="large" border
-            >Геморрагический</el-radio
+            <el-option label="10%" value="10%" />
+            <el-option label="20%" value="20%" />
+            <el-option label="30%" value="30%" />
+            <el-option label="40%" value="40%" />
+            <el-option label="50%" value="50%" />
+            <el-option label="60%" value="60%" />
+            <el-option label="70%" value="70%" />
+            <el-option label="80%" value="80%" />
+            <el-option label="90%" value="90%" />
+            <el-option label="100%" value="100%" />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          >Имеются ли у вас движения на поражённой ноге?</el-form-item
+        >
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_injured_leg_movemented">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="form.is_injured_leg_movemented"
+          >На сколько % она работает?</el-form-item
+        >
+        <el-form-item v-if="form.is_injured_leg_movemented" label="Укажите %">
+          <el-select
+            v-model="form.percent_of_injured_leg_movemented"
+            placeholder="Указананный уровень"
           >
-          <el-radio label="Другое" size="large" border>Другое</el-radio>
-        </el-radio-group>
+            <el-option label="10%" value="10%" />
+            <el-option label="20%" value="20%" />
+            <el-option label="30%" value="30%" />
+            <el-option label="40%" value="40%" />
+            <el-option label="50%" value="50%" />
+            <el-option label="60%" value="60%" />
+            <el-option label="70%" value="70%" />
+            <el-option label="80%" value="80%" />
+            <el-option label="90%" value="90%" />
+            <el-option label="100%" value="100%" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item>Имеются ли у вас движения в голеностопе?</el-form-item>
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_injured_ankle_movemented">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item>Имеются ли у вас движения пальцев ноги?</el-form-item>
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_injured_toes_movemented">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item>Может ли пациент сидеть или стоять?</el-form-item>
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_patient_state_or_sit">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item
+          >Имеются ли пациент не самостоятельно / с опорой ходить?</el-form-item
+        >
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_patient_walk_with_supports">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item
+          >Сгибается / Разгибается нога в колленом суставе?</el-form-item
+        >
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_knee_work">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item
+          >Имеются ли у вас движения на поражённой руке?</el-form-item
+        >
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_injured_arm_movemented">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="form.is_injured_arm_movemented"
+          >На сколько % она работает?</el-form-item
+        >
+        <el-form-item v-if="form.is_injured_arm_movemented" label="Укажите %">
+          <el-select
+            v-model="form.percent_of_injured_arm_movemented"
+            placeholder="Указананный уровень"
+          >
+            <el-option label="10%" value="10%" />
+            <el-option label="20%" value="20%" />
+            <el-option label="30%" value="30%" />
+            <el-option label="40%" value="40%" />
+            <el-option label="50%" value="50%" />
+            <el-option label="60%" value="60%" />
+            <el-option label="70%" value="70%" />
+            <el-option label="80%" value="80%" />
+            <el-option label="90%" value="90%" />
+            <el-option label="100%" value="100%" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+          >Сгибается / Разгибается рукав локтевом суставе?</el-form-item
+        >
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_elbow_work">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item
+          >Имеются ли у вас движения в пальцах на руке?</el-form-item
+        >
+        <el-form-item label="">
+          <el-radio-group v-model="form.is_injured_finger_movemented">
+            <el-radio :label="true" size="large" border>Да</el-radio>
+            <el-radio :label="false" size="large" border>Нет</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </div>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit"
+          >Отправить запрос на восстановление</el-button
+        >
       </el-form-item>
     </el-form>
-    {{ form }}
-    <div></div>
+    <!-- <div style="width: 100%; height: 500px"></div> -->
   </div>
 </template>
 
@@ -73,28 +232,75 @@ export default {
       form: {
         fio: "",
         date_of_birth: "",
-        gender: [],
-        region: [],
+        gender: "",
+        region: "",
         phone: "",
-        stroke: [],
-        type_of_stroke: [],
+        stroke: null,
+        type_of_stroke: "",
+        date_of_stroke: "",
+        know_reason: "",
+        percent_of_information: "",
+        is_injured_leg_movemented: "",
+        percent_of_injured_leg_movemented: "",
+        is_injured_ankle_movemented: "",
+        is_injured_toes_movemented: "",
+        is_patient_state_or_sit: "",
+        is_patient_walk_with_supports: "",
+        is_knee_work: "",
+        is_injured_arm_movemented: "",
+        percent_of_injured_arm_movemented: "",
+        is_elbow_work: "",
+        is_injured_finger_movemented: "",
       },
     };
   },
   methods: {
     onSubmit: function () {
-      console.log("submit!");
+      fetch("http://localhost:4600/new_user", {
+        // fetch("http://localhost:4600/article_data", {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Private-Network": true,
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify({
+          data: this.form,
+        }), // body data type must match "Content-Type" header
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          return null;
+        });
     },
   },
 };
 </script>
 
 <style>
-.container {
+.container-form {
   align-items: center;
   text-align: center;
-  margin-top: 30px;
-  position: relative;
-  left: -5%;
+}
+
+.form {
+  padding: 0 3vw 0 0;
+}
+
+.main-par {
+  color: #0836b5;
+  background-image: url("@/assets/bg_header.png");
+  font-style: normal;
+  font-weight: 900;
+  font-size: 100px;
+  line-height: 145px;
 }
 </style>

@@ -1,4 +1,6 @@
-import os
+from cgi import print_arguments
+from hashlib import new
+import os, datetime
 import sqlalchemy as sa
 from contextlib import contextmanager
 from sqlalchemy.ext.declarative import declarative_base
@@ -82,10 +84,121 @@ class Users(Base):
     Country = sa.Column(sa.Integer, sa.ForeignKey(Countries.id))
     Phone = sa.Column(sa.String(20))
     Stroke = sa.Column(sa.Integer, sa.ForeignKey(Strokes.id))
+
+
+class DB_get:
+    def string_to_datetime(self, s):
+        if s == "":
+            return None
+        return datetime.datetime.strptime(s[:10], '%Y-%m-%d').date()
+
+    def bool_in_bd(self, val):
+        if val == "":
+            return None
+        return val
+
+    def int_in_bd(self, val):
+        if val == "":
+            return None
+        return int(val)
+
+    def get_type_of_stroke(self, name):
+        if name == "":
+            return None
+        with create_session() as session:
+            req = session.query(Type_of_stroke).filter(
+                    Type_of_stroke.name == name).one_or_none()
+            if req is None:
+                return None
+            return req.id
+
+    def get_gender(self, name):
+        if name == "":
+            return None
+        with create_session() as session:
+            req = session.query(Genders).filter(
+                    Genders.name == name).one_or_none()
+            if req is None:
+                return None
+            return req.id
     
+    def get_country(self, name):
+        if name == "":
+            return None
+        with create_session() as session:
+            req = session.query(Countries).filter(
+                    Countries.name == name).one_or_none()
+            if req is None:
+                return None
+            return req.id
+    
+    
+    
+    def get_id_stroke(self, data):
+        with create_session() as session:
+            stroke_resp = session.query(Strokes).filter(
+                Strokes.is_stroked == True,
+                Strokes.type_of_stroke == self.get_type_of_stroke(data["type_of_stroke"]),
+                Strokes.date_of_stroke == self.string_to_datetime(data["date_of_stroke"]),
+                Strokes.is_knew_reason == self.bool_in_bd(data["know_reason"]),
+                Strokes.percent_of_information == self.int_in_bd(data["percent_of_information"]),
+                Strokes.is_injured_leg_movemented == self.bool_in_bd(data["is_injured_leg_movemented"]),
+                Strokes.percent_of_injured_leg_movemented == self.int_in_bd(data["percent_of_injured_leg_movemented"]),
+                Strokes.is_injured_ankle_movemented == self.bool_in_bd(data["is_injured_ankle_movemented"]),
+                Strokes.is_injured_toes_movemented == self.bool_in_bd(data["is_injured_toes_movemented"]),
+                Strokes.is_patient_state_or_sit == self.bool_in_bd(data["is_patient_state_or_sit"]),
+                Strokes.is_patient_walk_with_supports == self.bool_in_bd(data["is_patient_walk_with_supports"]),
+                Strokes.is_knee_work == self.bool_in_bd(data["is_knee_work"]),
+                Strokes.is_injured_arm_movemented == self.bool_in_bd(data["is_injured_arm_movemented"]),
+                Strokes.percent_of_injured_arm_movemented == self.int_in_bd(data["percent_of_injured_arm_movemented"]),
+                Strokes.is_elbow_work == self.bool_in_bd(data["is_elbow_work"]),
+                Strokes.is_injured_finger_movemented == self.bool_in_bd(data["is_injured_finger_movemented"]),
+            ).all()
+            return stroke_resp[0].id
 
-
+    
 class DB_new:
+    def __init__(self) -> None:
+        self.DBS = DB_get()
+
+    def create_new_stroke(self, data):
+        with create_session() as session:
+            session.add(Strokes(
+                is_stroked = True,
+                type_of_stroke = self.DBS.get_type_of_stroke(data["type_of_stroke"]),
+                date_of_stroke = self.DBS.string_to_datetime(data["date_of_stroke"]),
+                is_knew_reason = self.DBS.bool_in_bd(data["know_reason"]),
+                percent_of_information = self.DBS.int_in_bd(data["percent_of_information"]),
+                is_injured_leg_movemented = self.DBS.bool_in_bd(data["is_injured_leg_movemented"]),
+                percent_of_injured_leg_movemented = self.DBS.int_in_bd(data["percent_of_injured_leg_movemented"]),
+                is_injured_ankle_movemented = self.DBS.bool_in_bd(data["is_injured_ankle_movemented"]),
+                is_injured_toes_movemented = self.DBS.bool_in_bd(data["is_injured_toes_movemented"]),
+                is_patient_state_or_sit = self.DBS.bool_in_bd(data["is_patient_state_or_sit"]),
+                is_patient_walk_with_supports = self.DBS.bool_in_bd(data["is_patient_walk_with_supports"]),
+                is_knee_work = self.DBS.bool_in_bd(data["is_knee_work"]),
+                is_injured_arm_movemented = self.DBS.bool_in_bd(data["is_injured_arm_movemented"]),
+                percent_of_injured_arm_movemented = self.DBS.int_in_bd(data["percent_of_injured_arm_movemented"]),
+                is_elbow_work = self.DBS.bool_in_bd(data["is_elbow_work"]),
+                is_injured_finger_movemented = self.DBS.bool_in_bd(data["is_injured_finger_movemented"]),
+            ))
+            stroke_id =  self.DBS.get_id_stroke(data)
+        return stroke_id
+
+
+    def create_new_user(self, form_data):
+        print(form_data)
+        if form_data["stroke"]:
+            stroke_id = self.create_new_stroke(form_data)
+        with create_session() as session:
+            session.add(Users(
+                fio = form_data["fio"],
+                date_of_birth = self.DBS.string_to_datetime(form_data["date_of_birth"]),
+                gender = self.DBS.get_gender(form_data["gender"]),
+                Country = self.DBS.get_country(form_data["region"]),
+                Phone = form_data["phone"],
+                Stroke = stroke_id,
+            ))
+
     def set_all_genders(self):
         genders_list = ["Мужской", "Женский", "Другое"] 
         for gender_item in genders_list:
