@@ -10,7 +10,7 @@
         <el-date-picker
           v-model="form.date_of_birth"
           type="date"
-          placeholder="Pick a date"
+          placeholder="Выберете дату"
           style="width: 100%"
         />
       </el-form-item>
@@ -62,7 +62,7 @@
           <el-date-picker
             v-model="form.date_of_stroke"
             type="date"
-            placeholder="Pick a date"
+            placeholder="Выберете дату"
             style="width: 100%"
           />
         </el-form-item>
@@ -292,7 +292,11 @@ export default {
 }
 
 .form {
+  position: relative;
+  align-self: center;
   padding: 0 3vw 0 0;
+  width: 60vw;
+  margin: auto;
 }
 
 .main-par {
