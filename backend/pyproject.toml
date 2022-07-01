@@ -9,6 +9,8 @@ packages = [
 
 [tool.poetry.scripts]
 run_server = "src.main:runner"
+set_db = "src.db.set_db:runner"
+email = "src.email:runner"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -18,6 +20,7 @@ importlib-metadata = "^4.12.0"
 SQLAlchemy = "^1.4.39"
 PyMySQL = "^1.0.2"
 typer = "^0.4.1"
+secure-smtplib = "^0.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

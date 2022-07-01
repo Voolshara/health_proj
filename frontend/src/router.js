@@ -13,6 +13,10 @@ const routes = [
     path: "/form1",
     component: () => import("@/routes/first_form.vue"),
   },
+  {
+    path: "/form2",
+    component: () => import("@/routes/second_form.vue"),
+  },
 ];
 
 // 3. Create the router instance and pass the `routes` option

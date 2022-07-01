@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 from typer import Typer 
-from .db import DB_new
+from src.db.db import DB_new
 
 
 runner = Typer()
@@ -22,4 +22,4 @@ def form1():
 
 @runner.command()
 def runner():
-    app.run(host="localhost", port="4600") # запуск сервераp
+    app.run(host="localhost", port="5600") # запуск сервераp

@@ -1,6 +1,11 @@
 <template>
   <div class="container-form">
-    <p class="main-par">Заполните анкету</p>
+    <p class="main-par">Анкета 2</p>
+    <el-image
+      style="width: 300px; height: 200px"
+      src="@/assets/fast_recover.png"
+      :fit="'fit'"
+    />
     <el-form :model="form" label-width="200px" class="form">
       <el-form-item label="Имя">
         <el-input v-model="form.name" placeholder="Имя" />
