@@ -279,8 +279,8 @@ export default {
   },
   methods: {
     onSubmit: function () {
-      fetch("http://localhost:5600/new_user", {
-        // fetch("http://localhost:4600/article_data", {
+      // fetch("http://localhost:5600/new_user", {
+      fetch("http://45.91.8.150:5600/new_user", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
