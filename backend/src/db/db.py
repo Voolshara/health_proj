@@ -1,6 +1,4 @@
 import os, datetime
-from certifi import where
-from more_itertools import last
 import sqlalchemy as sa
 from contextlib import contextmanager
 from sqlalchemy.ext.declarative import declarative_base
