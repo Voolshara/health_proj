@@ -1,4 +1,5 @@
 import os, datetime
+from certifi import where
 from more_itertools import last
 import sqlalchemy as sa
 from contextlib import contextmanager
@@ -55,12 +56,17 @@ class Strokes(Base):
     is_can_sit = sa.Column(sa.Boolean())
     is_can_state = sa.Column(sa.Boolean())
     is_patient_walk_with_supports = sa.Column(sa.Boolean())
-    is_knee_work = sa.Column(sa.Boolean())
+    is_knee_bend = sa.Column(sa.Boolean())
+    is_knee_unbend = sa.Column(sa.Boolean())
     is_injured_arm_movemented = sa.Column(sa.Boolean())
     percent_of_injured_arm_movemented = sa.Column(sa.Integer)
-    is_elbow_work = sa.Column(sa.Boolean())
-    is_forearm_work = sa.Column(sa.Boolean())
+    is_elbow_bend = sa.Column(sa.Boolean())
+    is_elbow_unbend = sa.Column(sa.Boolean())
+    is_forearm_bend = sa.Column(sa.Boolean())
+    is_forearm_unbend = sa.Column(sa.Boolean())
     is_injured_finger_movemented = sa.Column(sa.Boolean())
+    now_year_to_repair = sa.Column(sa.String(5))
+    where_to_repair = sa.Column(sa.String(15))
 
 
 class Genders(Base):
@@ -150,12 +156,17 @@ class DB_get:
                 Strokes.is_can_sit == self.bool_in_bd(data["is_can_sit"]),
                 Strokes.is_can_state == self.bool_in_bd(data["is_can_state"]),
                 Strokes.is_patient_walk_with_supports == self.bool_in_bd(data["is_patient_walk_with_supports"]),
-                Strokes.is_knee_work == self.bool_in_bd(data["is_knee_work"]),
+                Strokes.is_knee_bend == self.bool_in_bd(data["is_knee_bend"]),
+                Strokes.is_knee_unbend == self.bool_in_bd(data["is_knee_unbend"]),
                 Strokes.is_injured_arm_movemented == self.bool_in_bd(data["is_injured_arm_movemented"]),
                 Strokes.percent_of_injured_arm_movemented == self.int_in_bd(data["percent_of_injured_arm_movemented"]),
-                Strokes.is_elbow_work == self.bool_in_bd(data["is_elbow_work"]),
-                Strokes.is_forearm_work == self.bool_in_bd(data["is_forearm_work"]),
+                Strokes.is_elbow_bend == self.bool_in_bd(data["is_elbow_bend"]),
+                Strokes.is_elbow_unbend == self.bool_in_bd(data["is_elbow_unbend"]),
+                Strokes.is_forearm_bend == self.bool_in_bd(data["is_forearm_bend"]),
+                Strokes.is_forearm_unbend == self.bool_in_bd(data["is_forearm_unbend"]),
                 Strokes.is_injured_finger_movemented == self.bool_in_bd(data["is_injured_finger_movemented"]),
+                Strokes.now_year_to_repair == data["now_year_to_repair"],
+                Strokes.where_to_repair == data["where_to_repair"]
             ).all()
             return stroke_resp[0].id
 
@@ -178,12 +189,17 @@ class DB_new:
                 is_can_sit = self.DBS.bool_in_bd(data["is_can_sit"]),
                 is_can_state = self.DBS.bool_in_bd(data["is_can_state"]),
                 is_patient_walk_with_supports = self.DBS.bool_in_bd(data["is_patient_walk_with_supports"]),
-                is_knee_work = self.DBS.bool_in_bd(data["is_knee_work"]),
+                is_knee_bend = self.DBS.bool_in_bd(data["is_knee_bend"]),
+                is_knee_unbend = self.DBS.bool_in_bd(data["is_knee_unbend"]),
                 is_injured_arm_movemented = self.DBS.bool_in_bd(data["is_injured_arm_movemented"]),
                 percent_of_injured_arm_movemented = self.DBS.int_in_bd(data["percent_of_injured_arm_movemented"]),
-                is_elbow_work = self.DBS.bool_in_bd(data["is_elbow_work"]),
-                is_forearm_work = self.DBS.bool_in_bd(data["is_forearm_work"]),
+                is_elbow_bend = self.DBS.bool_in_bd(data["is_elbow_bend"]),
+                is_elbow_unbend = self.DBS.bool_in_bd(data["is_elbow_unbend"]),
+                is_forearm_bend = self.DBS.bool_in_bd(data["is_forearm_bend"]),
+                is_forearm_unbend = self.DBS.bool_in_bd(data["is_forearm_unbend"]),
                 is_injured_finger_movemented = self.DBS.bool_in_bd(data["is_injured_finger_movemented"]),
+                now_year_to_repair = data["now_year_to_repair"],
+                where_to_repair = data["where_to_repair"]
             ))
         with create_session() as session:
             stroke_id = self.DBS.get_id_stroke(data)
@@ -191,7 +207,6 @@ class DB_new:
 
 
     def create_new_user(self, form_data):
-        print(form_data)
         with create_session() as session:
             if form_data["stroke"]:
                 stroke_id = self.create_new_stroke(form_data)

@@ -5,9 +5,18 @@
     width="40%"
     :show-close="false"
   >
-    <el-form :model="form" style="margin: 40px; margin-bottom: 0">
-      <el-form-item label="Номер" :label-width="formLabelWidth">
-        <el-input v-model="form.id" autocomplete="off" />
+    <!-- :before-close="() => {}" -->
+    <el-form
+      :model="form"
+      label-width="100px"
+      style="margin: 40px; margin-bottom: 0; margin-left: 10px"
+    >
+      <el-form-item label="Ваша почта" :label-width="formLabelWidth">
+        <el-input v-model="form.email" autocomplete="off" />
+      </el-form-item>
+
+      <el-form-item label="Код" :label-width="formLabelWidth">
+        <el-input v-model="form.password" autocomplete="off" />
       </el-form-item>
 
       <el-form-item>
@@ -26,7 +35,8 @@ export default {
     return {
       dialogVisible: true,
       form: {
-        id: "",
+        email: "",
+        password: "",
       },
     };
   },
