@@ -26,18 +26,6 @@
       </el-col>
     </el-row>
     <el-form :model="form" label-width="200px" class="form">
-      <el-form-item label="ID пользователя">
-        <el-input v-model="form.id" placeholder="ID" />
-      </el-form-item>
-      <el-form-item> На какой стороне у вас порез? </el-form-item>
-      <el-form-item label="Сторона: ">
-        <el-radio-group v-model="form.place_of_injure">
-          <el-radio label="left" size="large" border>Левая сторона</el-radio>
-          <el-radio label="right" size="large" border>Правая сторона</el-radio>
-          <el-radio label="both" size="large" border>Обе стороны</el-radio>
-        </el-radio-group>
-      </el-form-item>
-
       <el-form-item> Отличается ли у вас чувствительность ног? </el-form-item>
       <el-form-item label="">
         <el-radio-group v-model="form.differences_of_legs">
@@ -112,7 +100,6 @@ export default {
         ],
       ],
       form: {
-        id: "",
         place_of_injure: "",
         differences_of_legs: "",
         differences_of_arms: "",

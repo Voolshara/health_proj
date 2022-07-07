@@ -10,12 +10,20 @@ const routes = [
     component: () => import("@/routes/terms.vue"),
   },
   {
+    path: "/form_selection",
+    component: () => import("@/routes/selection.vue"),
+  },
+  {
     path: "/form1",
     component: () => import("@/routes/first_form.vue"),
   },
   {
     path: "/form2",
     component: () => import("@/routes/second_form.vue"),
+  },
+  {
+    path: "/task1",
+    component: () => import("@/routes/task1.vue"),
   },
 ];
 
