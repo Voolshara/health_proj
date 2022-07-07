@@ -25,6 +25,22 @@ const routes = [
     path: "/task1",
     component: () => import("@/routes/task1.vue"),
   },
+  {
+    path: "/task2",
+    component: () => import("@/routes/task2.vue"),
+  },
+  {
+    path: "/task3",
+    component: () => import("@/routes/task3.vue"),
+  },
+  {
+    path: "/task4",
+    component: () => import("@/routes/task4.vue"),
+  },
+  {
+    path: "/task5",
+    component: () => import("@/routes/task5.vue"),
+  },
 ];
 
 // 3. Create the router instance and pass the `routes` option

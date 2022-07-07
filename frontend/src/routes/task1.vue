@@ -29,7 +29,8 @@
     <el-row class="task-container">
       <el-col :span="13">
         <p style="text-align: left; width: 30vw">
-          Первоначальное положение мышц - согнутые ноги под углом 90°
+          Первоначальное положение обеих сторон - нога слегка вытянута , носок
+          слегка вытянут вперед
         </p></el-col
       >
       <el-col :span="11">
@@ -112,21 +113,21 @@
         </video>
       </el-col>
     </el-row>
-    <!-- 
-    <el-form :model="form" label-width="120px">
-      <el-row style="margin-top: 30px">
-        <el-col :span="15">
-          <div class="slider-block">
-            <el-slider v-model="value" vertical height="200px" />
-          </div>
-        </el-col>
-        <el-col :span="3">
-          <div class="slider-block">
-            <el-slider v-model="value" vertical height="200px" />
-          </div>
-        </el-col>
-      </el-row>
-    </el-form> -->
+
+    <el-form :model="form" label-width="120px" class="container-form">
+      <div class="slider-demo-block">
+        <el-row style="margin-top: 30px">
+          <el-col :span="12">
+            <el- v-model="form.left" vertical height="200px" />{{ form.left }}
+          </el-col>
+          <el-col :span="12">
+            <el-slider v-model="form.right" vertical height="200px" />{{
+              form.right
+            }}
+          </el-col></el-row
+        >
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -139,16 +140,9 @@ export default {
   },
   data() {
     return {
-      imageUrl: "/img/file_add.png",
       form: {
-        growth: "",
-        weight: "",
-        city: "",
-        is_illy: "",
-        is_use_treatments: "",
-        know_some_information: "",
-        reabilitation: "",
-        form_is_send: false,
+        left: 1,
+        right: 1,
       },
     };
   },
@@ -187,12 +181,12 @@ export default {
 .slider-demo-block {
   display: flex;
   align-items: center;
-
-  background-color: #fff;
+  justify-content: space-around;
 }
 .slider-demo-block .el-slider {
   margin-top: 0;
   margin-left: 12px;
+  background-color: darkcyan;
 }
 </style>
 
