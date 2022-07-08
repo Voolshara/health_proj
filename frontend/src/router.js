@@ -23,23 +23,35 @@ const routes = [
   },
   {
     path: "/task1",
-    component: () => import("@/routes/task1.vue"),
+    component: () => import("@/routes/tasks/task1.vue"),
   },
   {
     path: "/task2",
-    component: () => import("@/routes/task2.vue"),
+    component: () => import("@/routes/tasks/task2.vue"),
   },
   {
     path: "/task3",
-    component: () => import("@/routes/task3.vue"),
+    component: () => import("@/routes/tasks/task3.vue"),
   },
   {
     path: "/task4",
-    component: () => import("@/routes/task4.vue"),
+    component: () => import("@/routes/tasks/task4.vue"),
   },
   {
     path: "/task5",
-    component: () => import("@/routes/task5.vue"),
+    component: () => import("@/routes/tasks/task5.vue"),
+  },
+  {
+    path: "/task6",
+    component: () => import("@/routes/tasks/task6.vue"),
+  },
+  {
+    path: "/task7",
+    component: () => import("@/routes/tasks/task7.vue"),
+  },
+  {
+    path: "/task8",
+    component: () => import("@/routes/tasks/task8.vue"),
   },
 ];
 
