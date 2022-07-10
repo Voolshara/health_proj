@@ -428,14 +428,6 @@ export default {
   },
   methods: {
     onSubmit: function () {
-      // this.formRef.validate((valid) => {
-      //   if (valid) {
-      //     console.log("submit!");
-      //   } else {
-      //     console.log("error submit!");
-      //     return false;
-      //   }
-      // });
       // fetch("http://localhost:5600/new_user", {
       fetch("http://45.91.8.150:5600/new_user", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.

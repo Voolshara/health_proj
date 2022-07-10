@@ -10,76 +10,335 @@
     </p>
     <el-divider />
 
-    <div v-if="form_is_send" class="form-send">Форма отправлена</div>
+    <div v-if="status_of_form == 3" class="form-send">Форма отправлена</div>
     <div v-else>
-      <el-upload
-        class="avatar-uploader"
-        action="http://localhost:5000/upload_avatar"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
-      >
-        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-      </el-upload>
-      <p>Вам необходимо отправить нам фото 6x5;</p>
-
+      <div v-if="status_of_form == 0">
+        <el-upload
+          class="avatar-uploader"
+          action="http://localhost:5000/upload_avatar"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
+        <p>Вам необходимо отправить нам фото 6x5;</p>
+      </div>
       <el-form
         :model="form"
         label-width="300px"
         class="form"
         :label-position="'top'"
       >
-        <el-form-item label="Ваш рост (см)">
-          <el-input-number
-            v-model="form.growth"
-            :controls="false"
-            placeholder="Укажите число в см"
-            size="large"
-          />
-        </el-form-item>
+        <div v-if="status_of_form == 1" class="form-send">
+          <el-form-item label="Соблюдаете ли вы диету?">
+            <el-radio-group v-model="form.diete">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
 
-        <el-form-item label="Ваш вес (кг)">
-          <el-input-number
-            v-model="form.weight"
-            :controls="false"
-            placeholder="Укажите число в см"
-            size="large"
-          />
-        </el-form-item>
+          <div
+            style="
+              box-shadow: var(--el-box-shadow-dark);
+              padding: 10px;
+              margin: 10px;
+            "
+          >
+            <el-form-item label="Использовали ли вы ботулинотерапию?">
+              <el-radio-group v-model="form.boutuline">
+                <el-radio :label="true" size="large" border>Да</el-radio>
+                <el-radio :label="false" size="large" border>Нет</el-radio>
+              </el-radio-group>
+            </el-form-item>
 
-        <el-form-item label="Ваш город">
-          <el-input v-model="form.city" placeholder="Укажите город" />
-        </el-form-item>
+            <el-form-item label="Куда именно?" v-if="form.boutuline">
+              <el-input
+                v-model="form.where_boutuline"
+                placeholder="Укажите место"
+              />
+              <div style="text-align: left">
+                <p style="font-size: 20px; margin-top: 15px">
+                  Функции ботулинотерапии
+                </p>
+                <p>1.Эффект длится в течении до 3 месяце;</p>
+                <p>
+                  2.Прописывается далеко не всем / если нет самого движения , то
+                  делать его необходимости нет;
+                </p>
+                <p>3.Очень болезненно;</p>
+                <p>4.Ботулинотерапия вводится не всегда в правильные места;</p>
+                <p>
+                  5.Расслабляет спазмированные мышцы, но замедляет работу
+                  импульсов.
+                </p>
+              </div>
+            </el-form-item>
+          </div>
 
-        <el-form-item label="Имеется ли у вас сопутствующие заболевания?">
-          <el-radio-group v-model="form.is_illy">
-            <el-radio :label="true" size="large" border>Да</el-radio>
-            <el-radio :label="false" size="large" border>Нет</el-radio>
-          </el-radio-group>
-        </el-form-item>
+          <el-form-item label="Имеется ли у вас депрессия?">
+            <el-radio-group v-model="form.depression">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
 
-        <el-form-item label="Принимаете ли вы лекарства?">
-          <el-radio-group v-model="form.is_use_treatments">
-            <el-radio :label="true" size="large" border>Да</el-radio>
-            <el-radio :label="false" size="large" border>Нет</el-radio>
-          </el-radio-group>
-        </el-form-item>
+          <el-form-item label="Были ли у вас судороги?">
+            <el-radio-group v-model="form.sudoroga">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
 
-        <el-form-item label="Владеете ли вы какой-либо информацией о инсульте?">
-          <el-radio-group v-model="form.know_some_information">
-            <el-radio :label="true" size="large" border>Да</el-radio>
-            <el-radio :label="false" size="large" border>Нет</el-radio>
-          </el-radio-group>
-        </el-form-item>
+          <div
+            style="
+              box-shadow: var(--el-box-shadow-dark);
+              padding: 10px;
+              margin: 10px;
+            "
+          >
+            <el-form-item label="Нарушена ли у вас терморегуляция?">
+              <el-radio-group v-model="form.termo">
+                <el-radio :label="true" size="large" border>Да</el-radio>
+                <el-radio :label="false" size="large" border>Нет</el-radio>
+              </el-radio-group>
+            </el-form-item>
 
-        <el-form-item label="Была ли у вас реабилитация?">
-          <el-radio-group v-model="form.reabilitation">
-            <el-radio :label="true" size="large" border>Да</el-radio>
-            <el-radio :label="false" size="large" border>Нет</el-radio>
-          </el-radio-group>
-        </el-form-item>
+            <el-form-item v-if="form.termo">
+              <el-checkbox-group v-model="form.what_termo">
+                <div style="display: flex; flex-direction: column">
+                  <el-checkbox label="Холод" name="type" />
+                  <el-checkbox label="Жар" name="type" />
+                </div>
+              </el-checkbox-group>
+            </el-form-item>
 
+            <el-form-item label="В каком именно месте?" v-if="form.termo">
+              <el-input
+                v-model="form.where_termo"
+                placeholder="Укажите место"
+              />
+            </el-form-item>
+          </div>
+
+          <div
+            style="
+              box-shadow: var(--el-box-shadow-dark);
+              padding: 10px;
+              margin: 10px;
+            "
+          >
+            <el-form-item label="Имеется ли у вас головокружение?">
+              <el-radio-group v-model="form.headache">
+                <el-radio :label="true" size="large" border>Да</el-radio>
+                <el-radio :label="false" size="large" border>Нет</el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+            <el-form-item
+              label="Укажите уровень головокружения"
+              v-if="form.headache"
+            >
+              <el-select
+                v-model="form.lvl_of_headache"
+                placeholder="Укажите уровень"
+              >
+                <el-option label="1" value="1" />
+                <el-option label="2" value="2" />
+                <el-option label="3" value="3" />
+                <el-option label="4" value="4" />
+                <el-option label="5" value="5" />
+              </el-select>
+            </el-form-item>
+          </div>
+
+          <el-form-item label="Имеется ли у вас страх от падений?">
+            <el-radio-group v-model="form.fear_of_high">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-form-item v-if="form.fear_of_high"
+            ><p style="line-height: 15px; text-align: left; font-size: 15px">
+              Если повредится\сломается неработающая больная сторона - то она
+              срастается очень медленно. Поэтому лучше защититься заранее
+            </p>
+          </el-form-item>
+        </div>
+
+        <div v-else-if="status_of_form == 2">
+          <el-form-item>
+            <p style="font-size: 40px; margin: auto">ПОВРЕЖДЕНИЯ</p>
+            <p style="font-size: 15px; margin-top: 15px">
+              Из-за промедления времени с восстановлением вся поврежденная
+              сторона опускается вниз и начинаются различные боли в разных
+              частях тела
+            </p>
+          </el-form-item>
+
+          <div
+            style="
+              box-shadow: var(--el-box-shadow-dark);
+              padding: 10px;
+              margin: 10px;
+            "
+          >
+            <el-form-item label="Имеется ли у вас боль?">
+              <el-radio-group v-model="form.pain">
+                <el-radio :label="true" size="large" border>Да</el-radio>
+                <el-radio :label="false" size="large" border>Нет</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item v-if="form.pain"
+              >Укажите место боли и рядом опишите её</el-form-item
+            >
+            <el-form-item label="1" v-if="form.pain">
+              <el-input v-model="form.pain1" placeholder="Опишите боль" />
+            </el-form-item>
+            <el-form-item label="2" v-if="form.pain">
+              <el-input v-model="form.pain2" placeholder="Опишите боль" />
+            </el-form-item>
+            <el-form-item label="3" v-if="form.pain">
+              <el-input v-model="form.pain3" placeholder="Опишите боль" />
+            </el-form-item>
+          </div>
+          <!-- <el-form-item>
+            <el-carousel :interval="4000" type="card" height="200px">
+              <el-carousel-item v-for="item in 6" :key="item">
+                <h3 text="2xl" justify="center">{{ item }}</h3>
+              </el-carousel-item>
+            </el-carousel>
+          </el-form-item> -->
+
+          <el-form-item label="Пострадала ли у вас мимика?">
+            <el-radio-group v-model="form.mimika">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
+          <div
+            style="
+              box-shadow: var(--el-box-shadow-dark);
+              padding: 10px;
+              margin: 10px;
+            "
+          >
+            <el-form-item label="Имеется ли у вас спастика?">
+              <el-radio-group v-model="form.spastika">
+                <el-radio :label="true" size="large" border>Да</el-radio>
+                <el-radio :label="false" size="large" border>Нет</el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+            <el-form-item v-if="form.spastika">
+              <el-checkbox-group v-model="form.type_of_spastika">
+                <div style="display: flex; flex-direction: column">
+                  <el-checkbox label="Рука" name="type" />
+                  <el-checkbox label="Нога" name="type" />
+                  <el-checkbox label="Другое" name="type" />
+                </div>
+              </el-checkbox-group>
+            </el-form-item>
+          </div>
+
+          <div
+            style="
+              box-shadow: var(--el-box-shadow-dark);
+              padding: 10px;
+              margin: 10px;
+            "
+          >
+            <el-form-item label="Имеется ли у вас тонус?">
+              <el-radio-group v-model="form.tonus">
+                <el-radio :label="true" size="large" border>Да</el-radio>
+                <el-radio :label="false" size="large" border>Нет</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="Где именно?" v-if="form.tonus">
+              <el-input v-model="form.where_tonus" placeholder="" />
+            </el-form-item>
+          </div>
+        </div>
+
+        <div v-else-if="status_of_form == 0">
+          <el-form-item label="Ваш рост (см)">
+            <el-input-number
+              v-model="form.growth"
+              :controls="false"
+              placeholder="Укажите число в см"
+              size="large"
+            />
+          </el-form-item>
+
+          <el-form-item label="Ваш вес (кг)">
+            <el-input-number
+              v-model="form.weight"
+              :controls="false"
+              placeholder="Укажите число в см"
+              size="large"
+            />
+          </el-form-item>
+
+          <el-form-item label="Ваш город">
+            <el-input v-model="form.city" placeholder="Укажите город" />
+          </el-form-item>
+
+          <el-form-item label="Имеется ли у вас сопутствующие заболевания?">
+            <el-radio-group v-model="form.is_illy">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-form-item label="Принимаете ли вы лекарства?">
+            <el-radio-group v-model="form.is_use_treatments">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-form-item label="Какие?" v-if="form.is_use_treatments">
+            <el-input v-model="form.what_treatments" placeholder="Фамилия" />
+          </el-form-item>
+
+          <el-form-item
+            label="Владеете ли вы какой-либо информацией о инсульте?"
+          >
+            <el-radio-group v-model="form.know_some_information">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-form-item label="Была ли у вас реабилитация?">
+            <el-radio-group v-model="form.reabilitation">
+              <el-radio :label="true" size="large" border>Да</el-radio>
+              <el-radio :label="false" size="large" border>Нет</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-form-item
+            label="Что именно вы выполняли?"
+            v-if="form.reabilitation"
+          >
+            <el-checkbox-group v-model="form.what_reabilitation">
+              <div style="display: flex; flex-direction: column">
+                <el-checkbox label="Массаж" name="type" />
+                <el-checkbox label="Иглоукалывание" name="type" />
+                <el-checkbox label="Физио-терапия" name="type" />
+                <el-checkbox label="Аква терапия" name="type" />
+                <el-checkbox label="Пиллатес" name="type" />
+                <el-checkbox label="Эрготерапия" name="type" />
+                <el-checkbox label="Гимнастика" name="type" />
+                <el-checkbox label="Электростимуляция" name="type" />
+                <el-checkbox label="Другое" name="type" />
+              </div>
+            </el-checkbox-group>
+          </el-form-item>
+        </div>
         <el-form-item>
           <el-button type="primary" @click="onSubmit"
             >Отправить запрос на восстановление</el-button
@@ -106,38 +365,62 @@ export default {
         city: "",
         is_illy: "",
         is_use_treatments: "",
+        what_treatments: "",
         know_some_information: "",
         reabilitation: "",
-        form_is_send: false,
+        what_reabilitation: [],
+        diete: "",
+        boutuline: "",
+        where_boutuline: "",
+        depression: "",
+        sudoroga: "",
+        termo: "",
+        what_termo: [],
+        where_termo: "",
+        headache: "",
+        lvl_of_headache: "",
+        fear_of_high: "",
+        pain: "",
+        pain1: "",
+        pain2: "",
+        pain3: "",
+        mimika: "",
+        spastika: "",
+        type_of_spastika: [],
+        tonus: "",
+        where_tonus: "",
       },
+      status_of_form: 0,
     };
   },
   methods: {
     onSubmit: function () {
-      // fetch("http://localhost:5600/form1", {
-      fetch("http://localhost:5600/form1", {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Private-Network": true,
-        },
-        redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify({
-          data: this.form,
-        }), // body data type must match "Content-Type" header
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          (this.form_is_send = true), console.log(data);
+      this.status_of_form += 1;
+      if (this.status_of_form == 3)
+        // fetch("http://localhost:5600/form1", {
+        fetch("http://localhost:5600/form1", {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Private-Network": true,
+          },
+          redirect: "follow", // manual, *follow, error
+          referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify({
+            data: this.form,
+          }), // body data type must match "Content-Type" header
         })
-        .catch((error) => {
-          console.error("Error:", error);
-          return null;
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            (this.form_is_send = true), console.log(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            return null;
+          });
     },
   },
 };

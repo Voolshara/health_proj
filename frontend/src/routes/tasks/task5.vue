@@ -108,29 +108,18 @@
       </el-col>
     </el-row>
 
-    <el-form :model="form" label-width="120px" class="container-form">
-      <div class="slider-demo-block">
-        <el-row style="margin-top: 30px">
-          <el-col :span="12">
-            <el- v-model="form.left" vertical height="200px" />{{ form.left }}
-          </el-col>
-          <el-col :span="12">
-            <el-slider v-model="form.right" vertical height="200px" />{{
-              form.right
-            }}
-          </el-col></el-row
-        >
-      </div>
-    </el-form>
+    <BottomSlider :task_num="'task5'" />
   </div>
 </template>
 
 <script>
 import Dialog from "@/components/dialog.vue";
+import BottomSlider from "@/components/bottom_slider.vue";
 export default {
   name: "FormFirst",
   components: {
     Dialog,
+    BottomSlider,
   },
   data() {
     return {
