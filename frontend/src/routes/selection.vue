@@ -2,13 +2,7 @@
   <div class="container-form">
     <p class="main-par">Заполните анкету</p>
     <div v-if="form_is_send" class="form-send">Форма отправлена</div>
-    <el-form
-      v-else
-      :model="form"
-      label-width="200px"
-      class="form"
-      ref="formRef"
-    >
+    <el-form v-else :model="form" label-width="200px" class="form">
       <el-form-item
         prop="email"
         label="Эл почта"
@@ -428,8 +422,8 @@ export default {
   },
   methods: {
     onSubmit: function () {
-      // fetch("http://localhost:5600/new_user", {
-      fetch("http://45.91.8.150:5600/new_user", {
+      fetch("http://localhost:5600/form_selection", {
+        // fetch("http://45.91.8.150:5600/form_selection", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

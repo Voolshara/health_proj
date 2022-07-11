@@ -1,9 +1,11 @@
 import os, datetime
+import re
 import sqlalchemy as sa
 from contextlib import contextmanager
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import func
+# from werkzeug.security import generate_password_hash, check_password_hash
 
 
 engine = sa.create_engine(
@@ -168,6 +170,67 @@ class DB_get:
             ).all()
             return stroke_resp[0].id
 
+
+class DB_panel:
+    def __init__(self) -> None:
+        self.DBS = DB_get()
+
+    def get_all_users(self):
+        with create_session() as session:
+            req = session.query(Users).all()
+            OUT = []
+            for user in req:
+                OUT.append([
+                    user.name, 
+                    user.last_name, 
+                    "М" if user.gender == 1 else "Ж", 
+                    session.query(Countries).filter(
+                    Countries.id == user.Country).one().name,
+                    True if user.Stroke is not None else False,
+                    user.id
+                ])
+            return OUT
+
+    def get_user_data(self, user_id):
+        with create_session() as session:
+            OUT = {}
+            req = session.query(Users).filter(Users.id == user_id).one()
+            OUT["id"] = req.id
+            OUT["name"] = req.name
+            OUT["last_name"] = req.last_name
+            OUT["date_of_birth"] = req.date_of_birth
+            OUT["gender"] = session.query(Genders).filter(Genders.id == req.gender).one().name
+            OUT["Country"] = session.query(Countries).filter(Countries.id == req.Country).one().name
+            OUT["Phone"] = req.Phone
+            if req.Stroke is not None:
+                OUT["Selection"] = True 
+                req_stroke = session.query(Strokes).filter(Strokes.id == req.Stroke).one()
+                OUT["Selection_dict"] = {
+                    "type_of_stroke" : req_stroke.type_of_stroke,
+                    "date_of_stroke" : req_stroke.date_of_stroke,
+                    "is_knew_reason" : req_stroke.is_knew_reason,
+                    "percent_of_information" : req_stroke.percent_of_information,
+                    "is_injured_leg_movemented" : req_stroke.is_injured_leg_movemented,
+                    "percent_of_injured_leg_movemented" : req_stroke.percent_of_injured_leg_movemented,
+                    "is_injured_ankle_movemented" : req_stroke.is_injured_ankle_movemented,
+                    "is_can_sit" : req_stroke.is_can_sit,
+                    "is_can_state" : req_stroke.is_can_state,
+                    "is_patient_walk_with_supports" : req_stroke.is_patient_walk_with_supports,
+                    "is_knee_bend" : req_stroke.is_knee_bend,
+                    "is_knee_unbend" : req_stroke.is_knee_unbend,
+                    "is_injured_arm_movemented" : req_stroke.is_injured_arm_movemented,
+                    "percent_of_injured_arm_movemented" : req_stroke.percent_of_injured_arm_movemented, 
+                    "is_elbow_bend" : req_stroke.is_elbow_bend,
+                    "is_elbow_unbend" : req_stroke.is_elbow_unbend,
+                    "is_forearm_bend" : req_stroke.is_forearm_bend,
+                    "is_forearm_unbend" : req_stroke.is_forearm_unbend,
+                    "is_injured_finger_movemented" : req_stroke.is_injured_finger_movemented,
+                    "now_year_to_repair" : req_stroke.now_year_to_repair,
+                    "where_to_repair" : req_stroke.where_to_repair
+                } 
+            else:
+                OUT["Selection"] = False
+        return OUT
     
 class DB_new:
     def __init__(self) -> None:
@@ -205,6 +268,7 @@ class DB_new:
 
 
     def create_new_user(self, form_data):
+        print(form_data)
         with create_session() as session:
             if form_data["stroke"]:
                 stroke_id = self.create_new_stroke(form_data)

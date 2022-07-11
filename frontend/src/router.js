@@ -53,6 +53,26 @@ const routes = [
     path: "/task8",
     component: () => import("@/routes/tasks/task8.vue"),
   },
+  {
+    path: "/login",
+    component: () => import("@/routes/login.vue"),
+  },
+  {
+    path: "/admin_panel",
+    component: () => import("@/routes/admin_panel/panel.vue"),
+    /*beforeEnter: (to, from, next) => {
+      const isLoggedIn = !!Userfront.tokens.accessToken;
+      if (to.name === "Dashboard" && !isLoggedIn) {
+        return next({ path: "/login" });
+      }
+
+      next();
+    },*/
+  },
+  {
+    path: "/admin_panel/user/:id",
+    component: () => import("@/routes/admin_panel/user.vue"),
+  },
 ];
 
 // 3. Create the router instance and pass the `routes` option

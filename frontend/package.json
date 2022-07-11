@@ -11,6 +11,8 @@
     "core-js": "^3.8.3",
     "element-plus": "^2.2.6",
     "particles": "^0.1.4",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2",
     "vue": "^3.2.13",
     "vue-router": "^4.0.16",
     "vue-writer": "^1.2.0"
