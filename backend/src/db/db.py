@@ -9,7 +9,7 @@ from sqlalchemy.sql import func
 
 
 engine = sa.create_engine(
-    'mariadb+pymysql://{}:{}@{}:{}/{}'.format(
+    'mysql+pymysql://{}:{}@{}:{}/{}'.format(
         os.getenv('MySQL_NAME'),
         os.getenv('MySQL_PASSWORD'),
         os.getenv('MySQL_HOST'),
@@ -206,25 +206,25 @@ class DB_panel:
                 OUT["Selection"] = True 
                 req_stroke = session.query(Strokes).filter(Strokes.id == req.Stroke).one()
                 OUT["Selection_dict"] = {
-                    "type_of_stroke" : req_stroke.type_of_stroke,
+                    "type_of_stroke" : session.query(Type_of_stroke).filter(Type_of_stroke.id == req_stroke.type_of_stroke).one().name,
                     "date_of_stroke" : req_stroke.date_of_stroke,
-                    "is_knew_reason" : req_stroke.is_knew_reason,
+                    "is_knew_reason" : "Да" if req_stroke.is_knew_reason else "Нет",
                     "percent_of_information" : req_stroke.percent_of_information,
-                    "is_injured_leg_movemented" : req_stroke.is_injured_leg_movemented,
+                    "is_injured_leg_movemented" :  "Да" if req_stroke.is_injured_leg_movemented else "Нет",
                     "percent_of_injured_leg_movemented" : req_stroke.percent_of_injured_leg_movemented,
-                    "is_injured_ankle_movemented" : req_stroke.is_injured_ankle_movemented,
-                    "is_can_sit" : req_stroke.is_can_sit,
-                    "is_can_state" : req_stroke.is_can_state,
-                    "is_patient_walk_with_supports" : req_stroke.is_patient_walk_with_supports,
-                    "is_knee_bend" : req_stroke.is_knee_bend,
-                    "is_knee_unbend" : req_stroke.is_knee_unbend,
-                    "is_injured_arm_movemented" : req_stroke.is_injured_arm_movemented,
+                    "is_injured_ankle_movemented" :  "Да" if req_stroke.is_injured_ankle_movemented else "Нет",
+                    "is_can_sit" : "Да" if req_stroke.is_can_sit else "Нет",
+                    "is_can_state" :  "Да" if req_stroke.is_can_state else "Нет",
+                    "is_patient_walk_with_supports" :  "Да" if req_stroke.is_patient_walk_with_supports else "Нет",
+                    "is_knee_bend" :  "Да" if req_stroke.is_knee_bend else "Нет",
+                    "is_knee_unbend" :  "Да" if req_stroke.is_knee_unbend else "Нет",
+                    "is_injured_arm_movemented" :  "Да" if req_stroke.is_injured_arm_movemented else "Нет",
                     "percent_of_injured_arm_movemented" : req_stroke.percent_of_injured_arm_movemented, 
-                    "is_elbow_bend" : req_stroke.is_elbow_bend,
-                    "is_elbow_unbend" : req_stroke.is_elbow_unbend,
-                    "is_forearm_bend" : req_stroke.is_forearm_bend,
-                    "is_forearm_unbend" : req_stroke.is_forearm_unbend,
-                    "is_injured_finger_movemented" : req_stroke.is_injured_finger_movemented,
+                    "is_elbow_bend" :  "Да" if req_stroke.is_elbow_bend else "Нет",
+                    "is_elbow_unbend" :  "Да" if req_stroke.is_elbow_unbend else "Нет",
+                    "is_forearm_bend" :  "Да" if req_stroke.is_forearm_bend else "Нет",
+                    "is_forearm_unbend" :  "Да" if req_stroke.is_forearm_unbend else "Нет",
+                    "is_injured_finger_movemented" :  "Да" if req_stroke.is_injured_finger_movemented else "Нет",
                     "now_year_to_repair" : req_stroke.now_year_to_repair,
                     "where_to_repair" : req_stroke.where_to_repair
                 } 
@@ -268,7 +268,6 @@ class DB_new:
 
 
     def create_new_user(self, form_data):
-        print(form_data)
         with create_session() as session:
             if form_data["stroke"]:
                 stroke_id = self.create_new_stroke(form_data)

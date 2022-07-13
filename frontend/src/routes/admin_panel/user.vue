@@ -108,23 +108,8 @@
         </p>
 
         <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
-          <el-tab-pane label="Отборная анкета" :name="1">
-            <div v-if="!data['Selection']">У пацианта нет инсульта</div>
-            <div v-else>
-              <el-descriptions :column="1" border>
-                <el-descriptions-item
-                  label="ID пользователя"
-                  label-align="left"
-                  align="center"
-                  label-class-name="my-label"
-                  class-name="my-content"
-                  width="0"
-                  >{{ data["id"] }}</el-descriptions-item
-                ></el-descriptions
-              >
-
-              {{ data["Selection_dict"] }}
-            </div>
+          <el-tab-pane label="Отборная анкета" :name="1" class="selection">
+            <Selection :data="data" />
           </el-tab-pane>
           <el-tab-pane label="Первая форма" :name="2"
             >Пока ещё не готово (</el-tab-pane
@@ -163,8 +148,12 @@
 </template>
 
 <script>
+import Selection from "@/components/admin_panel/selection_form.vue";
 export default {
   name: "UserInPanel",
+  components: {
+    Selection,
+  },
   data() {
     return {
       data: {},
@@ -173,7 +162,7 @@ export default {
     };
   },
   mounted() {
-    //fetch("http://localhost:5600/panel/get_user_data", {
+    // fetch("http://localhost:5600/panel/get_user_data", {
     fetch("http://45.91.8.150:5600/panel/get_user_data", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -204,6 +193,10 @@ export default {
 </script>
 
 <style lang="scss">
+.selection {
+  width: 50vw;
+}
+
 .top-bunner {
   padding-left: 10vw;
   padding-right: 10vw;

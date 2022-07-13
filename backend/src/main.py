@@ -4,7 +4,6 @@ from typer import Typer
 from src.db.db import DB_new, DB_get, DB_panel
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
-import jwt
 from datetime import datetime, timedelta
 
 
@@ -57,5 +56,5 @@ def get_user_data():
 
 @runner.command()
 def runner():
-    # app.run(host="localhost", port="5600") # запуск сервераp
-    app.run(host="45.91.8.150", port="5600") # запуск сервераp
+    app.run(host="localhost", port="5600") # запуск сервераp
+    # app.run(host="45.91.8.150", port="5600") # запуск сервераp
