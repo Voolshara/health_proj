@@ -187,7 +187,8 @@ class DB_panel:
                     session.query(Countries).filter(
                     Countries.id == user.Country).one().name,
                     True if user.Stroke is not None else False,
-                    user.id
+                    user.id,
+                    user.date_of_birth
                 ])
             return OUT
 

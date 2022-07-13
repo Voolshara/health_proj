@@ -2,15 +2,7 @@
   <div class="panel-container">
     <p class="panel-name">Список пользователей</p>
     <div class="users animate__animated animate__backInUp animate__delay-1s">
-      <el-table
-        :data="user_data"
-        :table-layout="auto"
-        @row-click="click_to_row"
-      >
-        <el-table-column prop="[5]" />
-        <el-table-column label="" width="180">
-          <img src="/img/user.png" class="image" />
-        </el-table-column>
+      <el-table :data="filterTableData" size="large" @row-click="click_to_row">
         <el-table-column prop="[0]" label="Имя" />
         <el-table-column prop="[1]" label="Фамилия" />
         <el-table-column prop="[2]" label="Пол">
@@ -40,6 +32,24 @@
             }}</el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="Дата рождения">
+          <template #header>
+            <el-input
+              v-model="search"
+              size="small"
+              placeholder="Type to search"
+            />
+          </template>
+          <template #default="scope">
+            {{
+              scope.row[6].split(" ")[1] +
+              " " +
+              scope.row[6].split(" ")[2] +
+              " " +
+              scope.row[6].split(" ")[3]
+            }}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -51,11 +61,21 @@ export default {
   data() {
     return {
       user_data: [],
+      search: "",
     };
   },
   methods: {
     click_to_row: function (row) {
       this.$router.push("/admin_panel/user/" + row[5]);
+    },
+  },
+  computed: {
+    filterTableData() {
+      return this.user_data.filter(
+        (data) =>
+          !this.search.value ||
+          data[1].toLowerCase().includes(this.search.value.toLowerCase())
+      );
     },
   },
   mounted() {
@@ -86,7 +106,7 @@ export default {
 
 <style lang="scss">
 .users {
-  width: 60vw;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   justify-content: center;

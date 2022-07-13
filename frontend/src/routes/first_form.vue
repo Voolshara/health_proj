@@ -10,7 +10,8 @@
     </p>
     <el-divider />
 
-    <div v-if="status_of_form == 3" class="form-send">Форма отправлена</div>
+    <div v-if="status_of_form == 4" class="form-send">Форма отправлена</div>
+
     <div v-else>
       <div v-if="status_of_form == 0">
         <el-upload
@@ -41,7 +42,7 @@
 
           <div
             style="
-              box-shadow: var(--el-box-shadow-dark);
+              box-shadow: var(--el-box-shadow-lighter);
               padding: 10px;
               margin: 10px;
             "
@@ -93,7 +94,7 @@
 
           <div
             style="
-              box-shadow: var(--el-box-shadow-dark);
+              box-shadow: var(--el-box-shadow-lighter);
               padding: 10px;
               margin: 10px;
             "
@@ -124,7 +125,7 @@
 
           <div
             style="
-              box-shadow: var(--el-box-shadow-dark);
+              box-shadow: var(--el-box-shadow-lighter);
               padding: 10px;
               margin: 10px;
             "
@@ -180,7 +181,7 @@
 
           <div
             style="
-              box-shadow: var(--el-box-shadow-dark);
+              box-shadow: var(--el-box-shadow-lighter);
               padding: 10px;
               margin: 10px;
             "
@@ -221,7 +222,7 @@
 
           <div
             style="
-              box-shadow: var(--el-box-shadow-dark);
+              box-shadow: var(--el-box-shadow-lighter);
               padding: 10px;
               margin: 10px;
             "
@@ -246,7 +247,7 @@
 
           <div
             style="
-              box-shadow: var(--el-box-shadow-dark);
+              box-shadow: var(--el-box-shadow-lighter);
               padding: 10px;
               margin: 10px;
             "
@@ -339,7 +340,12 @@
             </el-checkbox-group>
           </el-form-item>
         </div>
-        <el-form-item>
+
+        <w8_form v-if="status_of_form == 3" @value="write_session" />
+        <el-form-item v-if="status_of_form < 3">
+          <el-button type="primary" @click="onSubmit">Продолжить</el-button>
+        </el-form-item>
+        <el-form-item v-else>
           <el-button type="primary" @click="onSubmit"
             >Отправить запрос на восстановление</el-button
           >
@@ -351,14 +357,17 @@
 
 <script>
 import Dialog from "@/components/dialog.vue";
+import w8_form from "@/components/next_session.vue";
 export default {
   name: "FormFirst",
   components: {
     Dialog,
+    w8_form,
   },
   data() {
     return {
       imageUrl: "/img/file_add.png",
+      next_session: 0,
       form: {
         growth: "",
         weight: "",
@@ -396,8 +405,10 @@ export default {
   methods: {
     onSubmit: function () {
       this.status_of_form += 1;
-      if (this.status_of_form == 3)
+      if (this.status_of_form == 4) {
         // fetch("http://localhost:5600/form1", {
+        let data = this.form;
+        data["next_session"] = this.next_session;
         fetch("http://localhost:5600/form1", {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           mode: "cors", // no-cors, *cors, same-origin
@@ -410,7 +421,7 @@ export default {
           redirect: "follow", // manual, *follow, error
           referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
           body: JSON.stringify({
-            data: this.form,
+            data: data,
           }), // body data type must match "Content-Type" header
         })
           .then((response) => response.json())
@@ -421,6 +432,10 @@ export default {
             console.error("Error:", error);
             return null;
           });
+      }
+    },
+    write_session(val) {
+      this.next_session = val;
     },
   },
 };

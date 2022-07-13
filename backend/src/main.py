@@ -56,5 +56,8 @@ def get_user_data():
 
 @runner.command()
 def runner():
-    # app.run(host="localhost", port="5600") # запуск сервераp
-    app.run(host="45.91.8.150", port="5600") # запуск сервераp
+    try:
+        app.run(host="45.91.8.150", port="5600") # запуск сервераp
+    except:
+        app.run(host="localhost", port="5600") # запуск сервераp
+    
