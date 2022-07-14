@@ -1,6 +1,6 @@
 <template>
   <router-view class="wrapper" />
-  <Footer />
+  <Footer zz />
 </template>
 
 <script>

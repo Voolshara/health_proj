@@ -2,7 +2,7 @@
   <div class="panel-container">
     <p class="panel-name">Список пользователей</p>
     <div class="users animate__animated animate__backInUp animate__delay-1s">
-      <el-table :data="filterTableData" size="large" @row-click="click_to_row">
+      <el-table :data="user_data" size="large" @row-click="click_to_row">
         <el-table-column prop="[0]" label="Имя" />
         <el-table-column prop="[1]" label="Фамилия" />
         <el-table-column prop="[2]" label="Пол">
@@ -17,7 +17,7 @@
             >
             <el-tag
               class="ml-2"
-              type="error"
+              type="danger"
               size="large"
               effect="dark"
               v-else
@@ -38,6 +38,7 @@
               v-model="search"
               size="small"
               placeholder="Type to search"
+              @input="new_filters"
             />
           </template>
           <template #default="scope">
@@ -60,6 +61,7 @@ export default {
   name: "AdminPanel",
   data() {
     return {
+      original_user_data: [],
       user_data: [],
       search: "",
     };
@@ -68,13 +70,13 @@ export default {
     click_to_row: function (row) {
       this.$router.push("/admin_panel/user/" + row[5]);
     },
-  },
-  computed: {
-    filterTableData() {
-      return this.user_data.filter(
+    new_filters: function () {
+      this.user_data = this.original_user_data.filter(
         (data) =>
-          !this.search.value ||
-          data[1].toLowerCase().includes(this.search.value.toLowerCase())
+          !this.search ||
+          data[1].toLowerCase().includes(this.search.toLowerCase()) ||
+          data[0].toLowerCase().includes(this.search.toLowerCase()) ||
+          data[6].toLowerCase().includes(this.search.toLowerCase())
       );
     },
   },
@@ -95,7 +97,8 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.user_data = data["data"];
+        this.original_user_data = data["data"];
+        this.user_data = this.original_user_data;
       })
       .catch(() => {
         this.user_data = "Ошибка 500";
@@ -140,5 +143,9 @@ export default {
   justify-content: center;
   padding-top: 40px;
   padding-bottom: 80px;
+}
+
+.cont {
+  display: none;
 }
 </style>

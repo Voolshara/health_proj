@@ -1,9 +1,5 @@
 <template>
   <div class="container-user">
-    <div class="main-par">
-      <p>Профиль</p>
-    </div>
-
     <el-row class="top-bunner">
       <el-col :span="9"><img src="/img/user.png" class="image" /></el-col>
       <el-col :span="12">
@@ -70,7 +66,7 @@
             >
 
             <el-descriptions-item
-              label="Был ли Инсульт?"
+              label="Был ли у вас инсульт?"
               label-align="left"
               align="center"
               label-class-name="my-label"
@@ -84,27 +80,8 @@
     </el-row>
     <div style="display: flex; justify-content: center">
       <div class="main-container">
-        <div class="progress-recovery">
-          <p>Процент лечения</p>
-          <div><el-progress :percentage="50" /></div>
-        </div>
-        <div class="progress-recovery">
-          <p>Какая-то Информация</p>
-          <div><el-progress :percentage="100" status="success" /></div>
-        </div>
-
-        <div class="progress-recovery">
-          <p>Какая-то Информация</p>
-          <div><el-progress :percentage="100" status="warning" /></div>
-        </div>
-
-        <div class="progress-recovery">
-          <p>Какая-то Информация</p>
-          <div><el-progress :percentage="50" status="exception" /></div>
-        </div>
-
         <p style="margin-top: 70px; font-size: 50px; margin-bottom: 30px">
-          Информация о тестах
+          Заполнение пациента
         </p>
 
         <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
@@ -117,28 +94,7 @@
           <el-tab-pane label="Вторая форма" :name="3"
             >Пока ещё не готово (</el-tab-pane
           >
-          <el-tab-pane label="Задание 1" :name="4"
-            >Пока ещё не готово (</el-tab-pane
-          >
-          <el-tab-pane label="Задание 2" :name="5"
-            >Пока ещё не готово (</el-tab-pane
-          >
-          <el-tab-pane label="Задание 3" :name="6"
-            >Пока ещё не готово (</el-tab-pane
-          >
-          <el-tab-pane label="Задание 4" :name="7"
-            >Пока ещё не готово (</el-tab-pane
-          >
-          <el-tab-pane label="Задание 5" :name="8"
-            >Пока ещё не готово (</el-tab-pane
-          >
-          <el-tab-pane label="Задание 6" :name="9"
-            >Пока ещё не готово (</el-tab-pane
-          >
-          <el-tab-pane label="Задание 7" :name="10"
-            >Пока ещё не готово (</el-tab-pane
-          >
-          <el-tab-pane label="Задание 8" :name="11"
+          <el-tab-pane label="Задание 1 - 8" :name="4"
             >Пока ещё не готово (</el-tab-pane
           >
         </el-tabs>
@@ -256,5 +212,9 @@ export default {
       text-transform: uppercase;
     }
   }
+}
+
+.cont {
+  display: none;
 }
 </style>
