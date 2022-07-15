@@ -45,7 +45,20 @@
             {{
               scope.row[6].split(" ")[1] +
               " " +
-              scope.row[6].split(" ")[2] +
+              scope.row[6]
+                .split(" ")[2]
+                .replace("Jan", "Янв")
+                .replace("Feb", "Фев")
+                .replace("Mar", "Мар")
+                .replace("Apr", "Апр")
+                .replace("May", "Май")
+                .replace("Jun", "Июнь")
+                .replace("Jul", "Июль")
+                .replace("Aug", "Авг")
+                .replace("Sept", "Сент")
+                .replace("Oct", "Окт")
+                .replace("Nov", "Ноя")
+                .replace("Dec", "Дек") +
               " " +
               scope.row[6].split(" ")[3]
             }}
@@ -92,8 +105,8 @@ export default {
     },
   },
   mounted() {
-    //fetch("http://localhost:5600/panel/get_users", {
-    fetch("http://45.91.8.150:5600/panel/get_users", {
+    fetch("http://localhost:5600/panel/get_users", {
+      // fetch("http://45.91.8.150:5600/panel/get_users", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
