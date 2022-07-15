@@ -214,7 +214,7 @@ export default {
   }
 }
 
-.cont {
+.global-footer {
   display: none;
 }
 </style>

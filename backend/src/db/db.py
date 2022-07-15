@@ -175,6 +175,21 @@ class DB_panel:
     def __init__(self) -> None:
         self.DBS = DB_get()
 
+    def new_date_of_birth(self, date):
+        date = date.replace("Jan", "Янв")
+        date = date.replace("Feb", "Фев")
+        date = date.replace("Mar", "Мар")   
+        date = date.replace("Apr", "Апр")
+        date = date.replace("May", "Май")
+        date = date.replace("Jun", "Июнь")
+        date = date.replace("Jul", "Июль")
+        date = date.replace("Aug", "Авг")
+        date = date.replace("Sept", "Сент")
+        date = date.replace("Oct", "Окт")
+        date = date.replace("Nov", "Ноя")
+        date = date.replace("Dec", "Дек")
+        return 
+
     def get_all_users(self):
         with create_session() as session:
             req = session.query(Users).all()
@@ -188,7 +203,7 @@ class DB_panel:
                     Countries.id == user.Country).one().name,
                     True if user.Stroke is not None else False,
                     user.id,
-                    user.date_of_birth
+                    self.new_date_of_birth(user.date_of_birth)
                 ])
             return OUT
 

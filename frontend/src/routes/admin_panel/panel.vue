@@ -1,6 +1,14 @@
 <template>
   <div class="panel-container">
     <p class="panel-name">Список пользователей</p>
+
+    <el-input
+      v-model="search"
+      size="large "
+      placeholder="Поиск"
+      @input="new_filters"
+      class="search-table"
+    />
     <div class="users animate__animated animate__backInUp animate__delay-1s">
       <el-table :data="user_data" size="large" @row-click="click_to_row">
         <el-table-column prop="[0]" label="Имя" />
@@ -33,14 +41,6 @@
           </template>
         </el-table-column>
         <el-table-column label="Дата рождения">
-          <template #header>
-            <el-input
-              v-model="search"
-              size="small"
-              placeholder="Type to search"
-              @input="new_filters"
-            />
-          </template>
           <template #default="scope">
             {{
               scope.row[6].split(" ")[1] +
@@ -50,6 +50,17 @@
               scope.row[6].split(" ")[3]
             }}
           </template>
+        </el-table-column>
+        <el-table-column label="Формы">
+          <div class="all-forms-status">
+            <el-tag type="success" effect="dark" size="small" round>✔</el-tag>
+            <el-tag type="success" effect="dark" size="small" round>✔</el-tag>
+            <el-tag type="warning" effect="dark" size="small" round>✎</el-tag>
+            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
+            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
+            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
+            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
+          </div>
         </el-table-column>
       </el-table>
     </div>
@@ -108,6 +119,17 @@ export default {
 </script>
 
 <style lang="scss">
+.search-table {
+  width: 30vw;
+  margin: 40px;
+  margin-bottom: 70px;
+}
+
+.all-forms-status {
+  display: flex;
+  flex-direction: row;
+}
+
 .users {
   width: 80vw;
   display: flex;
@@ -145,7 +167,7 @@ export default {
   padding-bottom: 80px;
 }
 
-.cont {
+.global-footer {
   display: none;
 }
 </style>
