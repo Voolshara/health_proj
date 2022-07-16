@@ -228,6 +228,8 @@
         width="0"
         >{{
           data["Selection_dict"]["now_year_to_repair"]
+            .replace("now", "В этом")
+            .replace("later", "В последующих")
         }}</el-descriptions-item
       >
 
@@ -238,7 +240,12 @@
         label-class-name="my-label"
         class-name="my-content"
         width="0"
-        >{{ data["Selection_dict"]["where_to_repair"] }}</el-descriptions-item
+        >{{
+          data["Selection_dict"]["where_to_repair"]
+            .replace("outside", "За пределами страны")
+            .replace("in_my_country", "В моей стране")
+            .replace("home", "На дому")
+        }}</el-descriptions-item
       >
     </el-descriptions>
   </div>
