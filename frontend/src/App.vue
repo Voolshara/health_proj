@@ -20,4 +20,8 @@ export default {
   font-family: Montserrat;
   font-weight: 500;
 }
+
+.global-footer {
+  display: contents;
+}
 </style>

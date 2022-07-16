@@ -6,6 +6,14 @@ const routes = [
     component: () => import("@/routes/main.vue"),
   },
   {
+    path: "/main",
+    component: () => import("@/routes/new_main.vue"),
+  },
+  {
+    path: "/new_main",
+    component: () => import("@/routes/new_new_main.vue"),
+  },
+  {
     path: "/:lang/terms",
     component: () => import("@/routes/terms.vue"),
   },
