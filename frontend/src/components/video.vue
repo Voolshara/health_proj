@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video ref="videoPlayer"></video>
+    <video ref="videoPlayer" class="video-js"></video>
   </div>
 </template>
 
@@ -23,7 +23,9 @@ export default {
     };
   },
   mounted() {
-    this.player = videojs(this.$refs.videoPlayer, this.options, () => {});
+    this.player = videojs(this.$refs.videoPlayer, this.options, () => {
+      this.player.log("onPlayerReady", this);
+    });
   },
   beforeUnmount() {
     if (this.player) {

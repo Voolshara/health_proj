@@ -1,131 +1,166 @@
 <template>
-  <div class="first-page">
-    <div class="first-anim">
-      <span class="dot left"></span>
-      <p class="animate__animated animate__fadeInTopLeft">Здравствуйте!</p>
-      <span class="dot right"></span>
+  <div class="preview-container">
+    <div class="main-par">
+      <el-image
+        class="main-par-img"
+        src="/main_page/bg_header.png"
+        :fit="fit"
+      />
     </div>
-    <div class="second-anim"></div>
+    <div class="main-p">
+      <p class="p2">NEW METHOD TO FAST</p>
+      <p class="p1">RECOVER</p>
+
+      <p class="p3">TM</p>
+
+      <p class="p4"><span>⌵</span><span>⌵</span></p>
+    </div>
   </div>
 </template>
 
+<script>
+export default {
+  name: "FiPagePreview",
+};
+</script>
+
 <style lang="scss">
-.first-page {
-  .first-anim {
-    z-index: 1;
-    p {
-      margin: auto;
-      font-weight: 800;
-      color: #202020;
-    }
-
-    .dot {
-      background-color: #202020;
-      border-radius: 50%;
-    }
-    .left {
-      position: absolute;
-      animation-name: left-dot;
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-    }
-
-    .right {
-      position: absolute;
-      animation-name: right-dot;
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-    }
-  }
-
-  .second-anim {
-    z-index: 2;
-
-    animation-name: grey-bg-1, grey-bg-2;
-    animation-delay: 0s, 2s;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-
-    background-color: #202020;
-    color: white;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-  }
-
-  width: 100vw;
-  height: 100vh;
-  font-size: 80px;
-
+.main-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 
-@keyframes grey-bg-1 {
-  0% {
-    top: 100%;
-    opacity: 0;
+  .preview-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .main-par {
+      .main-par-img {
+        animation-name: bg-image;
+        animation-duration: 1.5s;
+        animation-fill-mode: forwards;
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    .main-p {
+      .p1 {
+        animation: no-letter, letter-apper, fadeIn; /* referring directly to the animation's @keyframe declaration */
+        animation-duration: 2s, 1s, 1s; /* don't forget to set a duration! */
+        animation-delay: 0s, 2s, 2s;
+
+        color: #0836b5;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 16vw;
+        line-height: 12vw;
+        margin-bottom: 0;
+      }
+
+      .p2 {
+        animation: no-letter, letter-apper, fadeInDown; /* referring directly to the animation's @keyframe declaration */
+        animation-duration: 3.5s, 1s, 1s; /* don't forget to set a duration! */
+        animation-delay: 0s, 3.5s, 3.5s;
+
+        color: #0836b5;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 4vw;
+        line-height: 5vh;
+        margin-bottom: 0;
+
+        text-align: start;
+      }
+
+      .p3 {
+        animation: no-letter, letter-apper, fadeInUp; /* referring directly to the animation's @keyframe declaration */
+        animation-duration: 3.5s, 1s, 1s; /* don't forget to set a duration! */
+        animation-delay: 0s, 3.5s, 3.5s;
+
+        color: #0836b5;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 4vw;
+        line-height: 5vh;
+        margin-bottom: 0;
+
+        text-align: end;
+      }
+
+      .p4 {
+        animation: no-letter, letter-apper, fadeInDown, top-down; /* referring directly to the animation's @keyframe declaration */
+        animation-duration: 5s, 1s, 1s, 2s; /* don't forget to set a duration! */
+        animation-delay: 0s, 5s, 5s, 7.5s;
+        animation-iteration-count: 1, 1, 1, infinite;
+        display: flex;
+        flex-direction: column;
+
+        color: #0836b5;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 19vw;
+        margin-bottom: 0;
+        position: relative;
+        line-height: 10px;
+        top: 55vw;
+
+        text-align: center;
+      }
+
+      position: absolute;
+      align-items: center;
+      z-index: 2;
+    }
+
+    @keyframes top-down {
+      0% {
+        top: 55vw;
+      }
+      50% {
+        top: 50vw;
+      }
+      100% {
+        top: 55vw;
+      }
+    }
+
+    @keyframes no-letter {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes letter-apper {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes bg-image {
+      0% {
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.2;
+      }
+
+      100% {
+        width: 50vw;
+        height: 50vh;
+        opacity: 1;
+      }
+    }
   }
 
-  100% {
-    top: 100%;
-    opacity: 0;
-  }
-}
-
-@keyframes grey-bg-2 {
-  0% {
-    top: 100%;
-    opacity: 0;
-  }
-
-  100% {
-    top: 0%;
-    opacity: 1;
-  }
-}
-
-@keyframes left-dot {
-  0% {
-    bottom: 0;
-    left: -10%;
-    height: 300px;
-    width: 300px;
-    opacity: 0;
-  }
-
-  100% {
-    bottom: 70%;
-    left: -10%;
-    height: 600px;
-    width: 700px;
-    opacity: 1;
-  }
-}
-
-@keyframes right-dot {
-  0% {
-    top: -20%;
-    right: -25%;
-    height: 300px;
-    width: 300px;
-    opacity: 0;
-  }
-
-  100% {
-    top: 40%;
-    right: -20%;
-    height: 600px;
-    width: 700px;
-    opacity: 1;
+  .data-container {
+    height: 100vh;
   }
 }
 </style>
-
-<script>
-export default {
-  name: "PreviewMainPage",
-};
-</script>

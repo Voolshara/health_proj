@@ -1,42 +1,197 @@
 <template>
   <div class="main-container">
-    <video-player :options="videoOptions" />
+    <Preview />
+    <div class="data-container" v-on:scroll="go_sckull">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque rutrum
+        ante vel porta hendrerit. Etiam id nisl turpis. Mauris facilisis luctus
+        diam, id molestie sem ullamcorper id. Curabitur ornare rutrum pulvinar.
+        Praesent volutpat leo et aliquet dapibus. Sed erat lorem, tempor eget
+        est in, congue condimentum nisi. Fusce tristique nulla urna, at maximus
+        nisl viverra sed. Lorem ipsum dolor sit amet, consectetur adipiscing
+        elit. In non malesuada purus. Nunc pharetra finibus suscipit. Nunc
+        consectetur molestie ligula eu volutpat. Aenean pretium interdum mauris.
+        Aenean id mattis massa. Fusce in tellus lorem. Fusce ultricies eleifend
+        sem, a viverra velit cursus ac. Cras rutrum eget libero quis tincidunt.
+        In consequat nisi eu fringilla viverra. Pellentesque id blandit leo.
+        Nullam mattis nisi vel suscipit volutpat. Sed eu placerat elit. Sed
+        sollicitudin, ipsum non sodales tincidunt, magna neque rhoncus diam, eu
+        iaculis leo erat sed tortor. In blandit vestibulum urna, ut sagittis
+        augue auctor a. Curabitur facilisis, erat ut interdum varius, orci neque
+        euismod est, nec convallis ante mi sit amet nisl. Phasellus ut orci a
+        nulla sollicitudin ullamcorper. Praesent ultricies posuere mi, nec
+        pharetra lectus tempus eget. In hac habitasse platea dictumst. Duis non
+        vehicula justo. Nam ultrices dolor ipsum, et sagittis libero egestas
+        vitae. Mauris cursus dui est, dapibus dignissim nisl aliquet eu. Aliquam
+        ultricies ipsum auctor turpis tincidunt aliquam. Sed lobortis erat
+        ultricies, facilisis felis at, gravida nisl. Nunc ut sapien lorem.
+        Suspendisse sit amet diam rhoncus, molestie nisl vel, dignissim odio.
+        Curabitur bibendum magna in felis fringilla commodo. Pellentesque a
+        lacinia nisl, quis rutrum sem. Vestibulum euismod a sem vel porta.
+        Quisque efficitur maximus nisl, vel pharetra diam laoreet euismod. In
+        vel risus enim. Vestibulum sollicitudin nulla vitae scelerisque
+        interdum. Mauris vehicula enim sit amet gravida bibendum. Donec enim
+        lacus, venenatis a massa ut, ultricies mollis risus. Vestibulum ut
+        accumsan est, in venenatis metus. Sed id efficitur est, ac vehicula
+        diam. Aliquam id odio sed arcu hendrerit finibus. Vestibulum porta mi
+        quis magna varius, id tincidunt elit dapibus. Phasellus tempus, magna
+        vitae posuere dapibus, sapien leo rhoncus tellus, molestie blandit nunc
+        massa ultricies ante. Nulla lorem diam, feugiat sit amet est id, dapibus
+        auctor nisi. Morbi ut mollis erat, in porta mauris. Pellentesque
+        habitant morbi tristique senectus et netus et malesuada fames ac turpis
+        egestas. Praesent vel metus ut nisl cursus tincidunt a et enim. Mauris
+        id massa ac velit sollicitudin gravida. Vivamus massa tortor, molestie a
+        nisi at, facilisis commodo orci. Vivamus bibendum pulvinar sem eu
+        rutrum. Nullam tincidunt cursus est nec condimentum. Vivamus tristique
+        bibendum consectetur. Suspendisse potenti. Donec vitae risus ac quam
+        hendrerit sodales dapibus eu nunc. Etiam magna ipsum, porta in accumsan
+        sed, elementum vel purus. Donec consequat pretium justo sed interdum.
+        Donec porttitor ipsum magna. Cras ut pulvinar quam. Fusce tincidunt
+        ipsum pellentesque aliquam tristique. Nulla in facilisis odio. Nam ac
+        est augue. Duis rhoncus, ipsum sed vehicula fringilla, urna nisi
+        sollicitudin diam, ultrices malesuada dolor tortor et turpis. Vivamus
+        iaculis tempus dolor vitae imperdiet. Etiam sapien lacus, molestie vel
+        euismod vitae, vulputate rutrum lorem. Fusce volutpat egestas erat
+        laoreet cursus. In eu ipsum eget felis scelerisque sagittis quis finibus
+        tellus. Vivamus ac bibendum nunc. Nulla pharetra lectus ut elit
+        consequat, nec feugiat mi faucibus. Fusce faucibus purus tellus, sit
+        amet fringilla tellus efficitur ac. Integer sodales est lobortis,
+        egestas ligula ac, lobortis mauris. Curabitur pharetra augue quis justo
+        scelerisque, posuere efficitur enim feugiat. Aenean pretium sapien sit
+        amet imperdiet blandit. Vestibulum sit amet orci viverra, pharetra
+        lectus eget, luctus magna. In eleifend tempor porttitor. Aliquam erat
+        volutpat. Nunc id ipsum id nunc egestas bibendum vestibulum eget ex.
+        Pellentesque habitant morbi tristique senectus et netus et malesuada
+        fames ac turpis egestas. Morbi pretium purus sed eros fermentum, quis
+        congue metus vehicula. Interdum et malesuada fames ac ante ipsum primis
+        in faucibus. Pellentesque pulvinar neque velit, ac accumsan enim
+        dignissim vitae. Vestibulum nec odio vestibulum, hendrerit augue a,
+        dapibus tortor. Curabitur tempor vehicula euismod. Nunc eget magna eget
+        arcu accumsan pharetra. Vestibulum laoreet consequat risus a lacinia.
+        Vestibulum ultricies quis lorem vitae consectetur. Fusce quis ex
+        lobortis, finibus lorem ut, condimentum libero. Sed leo sem, laoreet nec
+        sem vitae, lacinia consectetur ligula. Nunc maximus suscipit tincidunt.
+        Morbi mauris magna, eleifend eu leo vitae, sagittis accumsan est. Sed eu
+        justo at nulla auctor tempus. Donec non odio non nisl semper aliquet.
+        Maecenas sit amet pulvinar nunc, at ornare justo. Suspendisse id orci et
+        mi efficitur posuere ut vitae arcu. Fusce semper felis a turpis mattis
+        lacinia. Curabitur ornare, arcu eu mollis gravida, nulla turpis
+        vulputate nisi, non tempor enim sapien sit amet enim. Praesent
+        vestibulum elit eget elementum imperdiet. Sed luctus urna sed massa
+        cursus, in tincidunt mauris mattis. Integer quam erat, interdum in
+        viverra at, bibendum nec magna. Praesent a turpis lacus. Proin faucibus
+        porta facilisis. Integer mattis facilisis euismod. Suspendisse egestas
+        convallis arcu, a dictum lacus lacinia facilisis. Fusce auctor mattis
+        elementum. In nec lectus bibendum, mattis erat vitae, vehicula neque.
+        Etiam elementum convallis enim eget auctor. Proin eget nunc et magna
+        finibus ultrices. Praesent mollis est nunc, condimentum vestibulum velit
+        maximus quis. Vestibulum ante ipsum primis in faucibus orci luctus et
+        ultrices posuere cubilia curae; Integer tristique odio sollicitudin,
+        porta ligula at, vestibulum magna. Aenean venenatis rutrum dui, eu
+        aliquet massa fermentum at. Orci varius natoque penatibus et magnis dis
+        parturient montes, nascetur ridiculus mus. Sed luctus ultrices libero
+        mollis aliquam. Nam dictum non arcu id volutpat. Cras fermentum ante
+        dui, eget faucibus arcu faucibus sed. In et suscipit ligula. Donec non
+        ornare massa. Praesent ut nulla in quam ornare pharetra in eget eros.
+        Curabitur et leo quis libero lacinia auctor. Proin eget purus libero.
+        Praesent a faucibus sapien, quis auctor orci. Curabitur pulvinar, nulla
+        vitae lobortis porttitor, felis sem ullamcorper ex, dictum aliquam purus
+        risus sit amet justo. Phasellus lorem nulla, commodo eu nulla ac, congue
+        tristique neque. Donec odio risus, venenatis ut rhoncus sit amet,
+        dapibus ac lorem. Etiam ultricies eros nec imperdiet porta. Morbi et
+        auctor arcu. Maecenas non facilisis mi, vitae porta felis. Nam sed
+        sapien cursus, vulputate erat in, molestie est. Duis malesuada ultrices
+        enim et cursus. In hac habitasse platea dictumst. Pellentesque varius
+        lectus nisl, et feugiat enim maximus sed. Aenean pretium dolor nec ante
+        feugiat, a pulvinar dolor ornare. Sed risus justo, facilisis sit amet
+        vestibulum eu, tincidunt vel orci. Interdum et malesuada fames ac ante
+        ipsum primis in faucibus. Etiam vitae metus lectus. Nulla dolor mi,
+        tempus quis scelerisque sit amet, aliquam a velit. Nulla facilisi.
+        Curabitur pretium felis at augue pulvinar, et molestie metus tristique.
+        Aenean convallis, est in varius vestibulum, orci nibh rhoncus augue, ac
+        ultrices lectus quam in mi. Nulla malesuada aliquet orci, ut facilisis
+        quam lacinia sit amet. Aliquam erat volutpat. Nulla sollicitudin, ante
+        ut luctus bibendum, lacus leo hendrerit metus, eu finibus nunc risus et
+        est. Duis tellus odio, feugiat at sodales non, consectetur eget dui.
+        Morbi aliquam sed elit nec volutpat. Fusce ultrices nunc nulla, ac
+        viverra urna ullamcorper id. Aenean dapibus lorem ipsum, at sodales
+        mauris accumsan sed. Sed non augue sed est rhoncus pellentesque. Cras
+        gravida, tellus iaculis dictum pretium, ex turpis tempus leo, vel
+        pharetra ante felis id sapien. Proin ultrices arcu iaculis, dictum quam
+        id, pellentesque diam. Nulla diam neque, auctor quis egestas non, porta
+        at erat. Vivamus sagittis rutrum consectetur.
+      </p>
+      <div class="video-container">
+        <video ref="video" src="/main_page/Brainstem.mp4" muted loop></video>
+      </div>
+    </div>
   </div>
 </template>
-
 <script>
-import VideoPlayer from "@/components/video.vue";
-
+import Preview from "@/components/first_page/preview.vue";
 export default {
-  name: "VideoExample",
   components: {
-    VideoPlayer,
+    Preview,
   },
   data() {
     return {
-      videoOptions: {
-        autoplay: true,
-        controls: false,
-        sources: [
-          {
-            src: "/main_page/Brainstem..mp4",
-            type: "video/mp4",
-          },
-        ],
-      },
+      isScrolling: false, // initially false,
+      scrollTimeout: null,
     };
+  },
+  created() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+  unmounted() {
+    window.removeEventListener("scroll", this.onScroll);
+  },
+  methods: {
+    go_sckull() {
+      console.log("qi");
+    },
+
+    onScroll() {
+      const vm = this;
+      vm.isScrolling = true; //as soon as scroll event is dispatched, set isScrolling as true
+      clearTimeout(vm.scrollTimeout); // clea
+      vm.scrollTimeout = setTimeout(function () {
+        vm.isScrolling = false;
+        vm.$refs.video.pause();
+      }, 100); //300ms after the last event isScrolling will be set false.
+
+      this.$refs.video.play();
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  .data-container {
+    width: 80vw;
+    height: 910vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .video-container {
+      position: fixed;
+      z-index: -1;
+      top: 25vh;
+    }
+  }
 }
+
 .global-footer {
   display: none;
+}
+
+body {
+  padding: 0;
+}
+
+.wrapper {
+  align-items: center;
 }
 </style>

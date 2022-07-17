@@ -16,6 +16,7 @@ const app = createApp(App).use(router);
 app.use(ElementPlus, { locale: RuLocale });
 app.use(Particles);
 app.use(VueWriter);
+
 app.mount("#app");
 
 export function isValidJwt(jwt) {
