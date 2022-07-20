@@ -90,6 +90,7 @@ class Users(Base):
     gender = sa.Column(sa.Integer, sa.ForeignKey(Genders.id))
     Country = sa.Column(sa.Integer, sa.ForeignKey(Countries.id))
     Phone = sa.Column(sa.String(20))
+    Email = sa.Column(sa.String(500))
     Stroke = sa.Column(sa.Integer, sa.ForeignKey(Strokes.id))
 
 
@@ -169,6 +170,17 @@ class DB_get:
                 Strokes.where_to_repair == data["where_to_repair"]
             ).all()
             return stroke_resp[0].id
+
+    def user_data(self, email):
+        with create_session() as session:
+            resp = session.query(Users).filter(Users.Email == email).one_or_none()
+            if resp is None:
+                return None
+            resp_stroke = session.query(Strokes).filter(Strokes.id == resp.Stroke).one_or_none()
+            if resp_stroke is None:
+                   return [resp.name, resp.last_name, resp.date_of_birth, resp.gender, resp.Country, "Нет инсульта"] 
+            resp_stroke_name = session.query(Type_of_stroke).filter(Type_of_stroke.id == resp_stroke.type_of_stroke).one()
+            return [resp.name, resp.last_name, resp.date_of_birth, resp.gender, resp.Country, resp_stroke_name.name]
 
 
 class DB_panel:
@@ -297,6 +309,7 @@ class DB_new:
                 gender = self.DBS.get_gender(form_data["gender"]),
                 Country = self.DBS.get_country(form_data["region"]),
                 Phone = form_data["phone"],
+                Email = form_data["email"],
                 Stroke = stroke_id,
             ))
 

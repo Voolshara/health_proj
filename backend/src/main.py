@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 
 runner = Typer()
 DBN = DB_new()
+DBG = DB_get()
 DBPANEL = DB_panel()
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ CORS(app, resources={
     r"/check_panel" : {"origins": "*"},
     r"/panel/get_users" : {"origins": "*"},
     r"/panel/get_user_data" : {"origins": "*"},
+    r"/check_email" : {"origins": "*"},
     }) # настройка CORS POLICY
 app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 
@@ -48,6 +50,11 @@ def check_panel():
 @app.route('/panel/get_users', methods=['POST'])  # роут сборки шаблонов
 def get_users():
     return {"data": DBPANEL.get_all_users()}
+
+
+@app.route('/check_email', methods=['POST'])  # роут сборки шаблонов
+def check_email():
+    return {"data": DBG.user_data(request.json["data"]["email"])}
 
 
 @app.route('/panel/get_user_data', methods=['POST'])  # роут сборки шаблонов
