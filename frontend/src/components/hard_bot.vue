@@ -137,6 +137,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
+      //sfdsf
       this.all_messages = [
         {
           text: "Здравствуйте",
