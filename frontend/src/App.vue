@@ -1,5 +1,6 @@
 <template>
   <router-view />
+
   <el-button
     :icon="ChatLineRound"
     circle
@@ -28,18 +29,48 @@
     <Bot />
   </el-drawer>
 
+  <el-button
+    :icon="ChatLineRound"
+    circle
+    v-if="type_problem !== null"
+    @click="drawer = true"
+    class="hard-bot-invoker"
+    type="warning"
+  />
+
+  <el-drawer
+    v-model="drawer"
+    title="I am the title"
+    :with-header="false"
+    size="80%"
+    v-if="isMobile()"
+  >
+    <HardBot />
+  </el-drawer>
+
+  <el-drawer
+    v-model="drawer"
+    title="I am the title"
+    :with-header="false"
+    v-else
+  >
+    <HardBot />
+  </el-drawer>
+
   <Footer />
 </template>
 
 <script>
 import Footer from "@/components/footer.vue";
 import Bot from "./components/bot.vue";
+import HardBot from "./components/hard_bot.vue";
 import { ChatLineRound } from "@element-plus/icons-vue";
 export default {
   name: "App",
   components: {
     Footer,
     Bot,
+    HardBot,
   },
   data() {
     return {
@@ -76,6 +107,13 @@ export default {
   z-index: 99999999;
   bottom: 8vh;
   right: 15vw;
+}
+
+.hard-bot-invoker {
+  position: fixed;
+  z-index: 99999999;
+  bottom: 8vh;
+  right: 10vw;
 }
 
 .global-footer {
