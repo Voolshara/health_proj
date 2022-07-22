@@ -11,9 +11,11 @@ import router from "./router";
 import Particles from "vue-particles";
 import VueWriter from "vue-writer";
 import RuLocale from "element-plus/es/locale/lang/ru";
+import VueAnimateOnScroll from "vue3-animate-onscroll";
 
 const app = createApp(App).use(router);
 app.use(ElementPlus, { locale: RuLocale });
+app.use(VueAnimateOnScroll);
 app.use(Particles);
 app.use(VueWriter);
 

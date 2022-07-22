@@ -1,11 +1,7 @@
 <template>
   <div class="preview-container">
     <div class="main-par">
-      <el-image
-        class="main-par-img"
-        src="/main_page/bg_header.png"
-        :fit="fit"
-      />
+      <el-image class="main-par-img" src="/main_page/bg_header.png" />
     </div>
     <div class="main-p">
       <p class="p2">NEW METHOD TO FAST</p>
