@@ -34,7 +34,7 @@ export default {
 
   .img {
     position: relative;
-    left: 10%;
+    left: 1 0%;
     width: 200px;
     height: 300px;
   }
