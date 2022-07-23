@@ -5,13 +5,13 @@
     :icon="ChatLineRound"
     circle
     v-if="type_problem !== null"
-    @click="drawer = true"
+    @click="drawer_mini = true"
     class="bot-invoker"
     type="success"
   />
 
   <el-drawer
-    v-model="drawer"
+    v-model="drawer_mini"
     title="I am the title"
     :with-header="false"
     size="70%"
@@ -21,7 +21,7 @@
   </el-drawer>
 
   <el-drawer
-    v-model="drawer"
+    v-model="drawer_mini"
     title="I am the title"
     :with-header="false"
     v-else
@@ -33,13 +33,13 @@
     :icon="ChatLineRound"
     circle
     v-if="type_problem !== null"
-    @click="drawer = true"
+    @click="drawer_max = true"
     class="hard-bot-invoker"
     type="warning"
   />
 
   <el-drawer
-    v-model="drawer"
+    v-model="drawer_max"
     title="I am the title"
     :with-header="false"
     size="80%"
@@ -49,7 +49,7 @@
   </el-drawer>
 
   <el-drawer
-    v-model="drawer"
+    v-model="drawer_max"
     title="I am the title"
     :with-header="false"
     v-else
@@ -74,7 +74,8 @@ export default {
   },
   data() {
     return {
-      drawer: false,
+      drawer_mini: false,
+      drawer_max: false,
       ChatLineRound: ChatLineRound,
     };
   },
@@ -104,14 +105,14 @@ export default {
 
 .bot-invoker {
   position: fixed;
-  z-index: 99999999;
+  z-index: 9;
   bottom: 8vh;
   right: 15vw;
 }
 
 .hard-bot-invoker {
   position: fixed;
-  z-index: 99999999;
+  z-index: 9;
   bottom: 8vh;
   right: 10vw;
 }

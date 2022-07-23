@@ -171,6 +171,8 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 10;
 
   .message-field {
     height: 50vh;
@@ -178,13 +180,14 @@ export default {
     flex-direction: column-reverse;
     align-items: flex-end;
     margin-bottom: 10px;
+    overflow: auto;
 
     .mess {
-      height: 30px;
+      height: 40px;
 
       p {
         margin-bottom: 0;
-        margin: 2px;
+        margin: 10px;
         white-space: normal;
       }
     }
