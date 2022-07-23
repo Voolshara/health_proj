@@ -266,6 +266,7 @@ export default {
     },
 
     send_contact_phone() {
+      this.mes_bot(this.contact_phone, 500, "text");
       this.mes_bot("Отправлено", 1000, "text");
       this.state = "base";
     },
