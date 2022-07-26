@@ -22,6 +22,10 @@ const routes = [
     component: () => import("@/routes/selection.vue"),
   },
   {
+    path: "/new_selection",
+    component: () => import("@/routes/selection_form.vue"),
+  },
+  {
     path: "/form1",
     component: () => import("@/routes/first_form.vue"),
   },
