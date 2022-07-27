@@ -30,6 +30,10 @@ const routes = [
     component: () => import("@/routes/first_form.vue"),
   },
   {
+    path: "/form1_new",
+    component: () => import("@/routes/first_form_new.vue"),
+  },
+  {
     path: "/form2",
     component: () => import("@/routes/second_form.vue"),
   },

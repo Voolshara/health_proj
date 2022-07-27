@@ -3,28 +3,13 @@
     <p class="main-par">Заполните анкету</p>
     <div v-if="form_is_send" class="form-send">Форма отправлена</div>
     <div v-else>
-      <el-form :model="form" label-width="200px" class="form">
-        <el-steps
-          :active="steps_active"
-          align-center
-          finish-status="success"
-          class="steps"
-        >
-          <el-step title="Личные данные" />
-          <el-step title="Был ли инсульт?" />
-          <el-step
-            title="Работа ног"
-            v-if="form.stroke == false"
-            status="error"
-          />
-          <el-step title="Работа ног" v-else />
-          <el-step
-            title="Работа рук"
-            v-if="form.stroke == false"
-            status="error"
-          />
-          <el-step title="Работа рук" v-else />
-        </el-steps>
+      <el-form
+        :model="form"
+        label-width="200px"
+        class="form"
+        size="large"
+        border
+      >
         <el-carousel
           height="70vh"
           :autoplay="false"
@@ -51,7 +36,11 @@
               ]"
               :validate="() => {}"
             >
-              <el-input v-model="form.email" placeholder="Ваша почта" />
+              <el-input
+                v-model="form.email"
+                :blur="page1"
+                placeholder="Ваша почта"
+              />
             </el-form-item>
             <el-form-item
               label="Имя"
@@ -606,6 +595,7 @@ export default {
   },
   methods: {
     page1() {
+      // console.log(ev);
       this.$refs["carousel"].next();
     },
     page2_prev() {
@@ -720,7 +710,8 @@ export default {
 .quiz-1 {
   p {
     font-size: 4vh;
-    margin-bottom: 70px;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
   .avatar-uploader .avatar {
     width: 70px;
