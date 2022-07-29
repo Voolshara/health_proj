@@ -19,7 +19,7 @@
           ref="carousel"
           style="display: flex; justify-content: center"
         >
-          <el-carousel-item style="width: 20vw; justify-self: flex-start">
+          <el-carousel-item class="quiz-el">
             <div>
               <p>Из каких вопросов вы хотите</p>
               <p>чтобы состояла данная методика?</p>
@@ -514,7 +514,7 @@ export default {
 }
 
 .quiz-el {
-  width: 20vw;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;

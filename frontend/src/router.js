@@ -38,6 +38,10 @@ const routes = [
     component: () => import("@/routes/second_form.vue"),
   },
   {
+    path: "/form2_new",
+    component: () => import("@/routes/second_form_new.vue"),
+  },
+  {
     path: "/task1",
     component: () => import("@/routes/tasks/task1.vue"),
   },
