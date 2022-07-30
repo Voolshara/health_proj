@@ -1,370 +1,507 @@
 <template>
   <div class="container-form">
-    <Dialog />
-    <p class="main-par">Анкета 2</p>
-    <div v-if="status_of_form == 3" class="form-send">Форма отправлена</div>
+    <p class="main-par">Заполните анкету</p>
+    <div v-if="form_is_send" class="form-send">Форма отправлена</div>
     <div v-else>
-      <p
-        class="sub_information"
-        style="font-size: 30px"
-        v-if="status_of_form == 0"
+      <el-form
+        :model="form"
+        label-width="200px"
+        label-position="top"
+        size="large"
+        border
       >
-        В данном тесте вам необходимо замерить диаметр мышц
-      </p>
-      <p
-        class="sub_information"
-        style="font-size: 20px"
-        v-if="status_of_form == 0"
-      >
-        Правила:
-      </p>
-      <el-row
-        style="
-          align-items: center;
-          justify-content: center;
-          padding-bottom: 50px;
-        "
-        v-if="status_of_form == 0"
-      >
-        <el-col
-          v-for="(o, index) in rules"
-          :key="o"
-          :span="o[2]"
-          :offset="index > 0 ? 1 : 0"
+        <el-carousel
+          height="70vh"
+          :autoplay="false"
+          :arrow="'never'"
+          indicator-position="none"
+          ref="carousel"
         >
-          <el-card :body-style="{ padding: '2px' }">
-            <img :src="o[0]" class="image" />
-            <div style="padding: 14px">
-              <div class="bottom">
-                <span>{{ o[1] }}</span>
-              </div>
+          <el-carousel-item class="carousel-wrapper">
+            <div class="carousel-el">
+              <el-form-item
+                label="Укажите свой рост (см)"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-1s"
+              >
+                <el-input-number
+                  v-model="form.tall"
+                  :controls="false"
+                  @change="page1"
+                  placeholder="ваш рост"
+                  size="large"
+                />
+              </el-form-item>
+
+              <el-form-item
+                label="Укажите свой вес (кг)"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-2s"
+              >
+                <el-input-number
+                  v-model="form.weight"
+                  :controls="false"
+                  @change="page1"
+                  placeholder="ваш вес"
+                  size="large"
+                />
+              </el-form-item>
+
+              <el-form-item
+                v-if="is_page_1"
+                label="Обхват талии (Ø \ см)"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp"
+              >
+                <el-input-number
+                  v-model="form.talia"
+                  :controls="false"
+                  @change="page1"
+                  placeholder="ваша талия"
+                  size="large"
+                  style="margin-right: 30px"
+                />
+                <el-image
+                  style="width: 200px; height: 200px"
+                  src="/img/task1/1.jpg"
+                  :fit="fit"
+                />
+              </el-form-item>
+              <el-button
+                class="animate__animated animate__fadeInUp animate__delay-3s"
+                type="primary"
+                @click="page_prev"
+                >← Назад</el-button
+              >
             </div>
-          </el-card>
-        </el-col>
-      </el-row>
+          </el-carousel-item>
 
-      <div v-if="status_of_form == 1" style="width: 60vw; margin: auto">
-        <p style="font-size: 45px; margin: 30px">Общие Вопросы</p>
-        <el-divider />
-      </div>
+          <!-- # _____________________________________________________________________________________________________ -->
 
-      <el-form :model="form" label-width="200px" class="form">
-        <div v-if="status_of_form == 0">
-          <el-form-item>
-            Отличается ли у вас чувствительность ног?
-          </el-form-item>
-          <el-form-item label="">
-            <el-radio-group v-model="form.differences_of_legs">
-              <el-radio :label="true" size="large" border>Да</el-radio>
-              <el-radio :label="false" size="large" border>Нет</el-radio>
-            </el-radio-group>
-          </el-form-item>
+          <el-carousel-item class="carousel-wrapper">
+            <div class="carousel-el">
+              <el-form-item
+                label="Какая сторона у вас поражена?"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-1s"
+              >
+                <el-radio-group v-model="form.side" @change="page2">
+                  <el-radio :label="'Левая'" size="large" border
+                    >Левая</el-radio
+                  >
+                  <el-radio :label="'Правая'" size="large" border
+                    >Правая</el-radio
+                  >
 
-          <el-form-item>
-            Отличается ли у вас чувствительность рук?
-          </el-form-item>
-          <el-form-item label="">
-            <el-radio-group v-model="form.differences_of_arms">
-              <el-radio :label="true" size="large" border>Да</el-radio>
-              <el-radio :label="false" size="large" border>Нет</el-radio>
-            </el-radio-group>
-          </el-form-item>
+                  <el-radio :label="'Обе'" size="large" border>Обе</el-radio>
+                  <el-radio :label="''" size="large" border>Другое</el-radio>
+                  <el-input
+                    v-if="
+                      form.side !== 'Левая' &&
+                      form.side !== 'Правая' &&
+                      form.side !== 'Обе' &&
+                      form.side !== null
+                    "
+                    @change="page2"
+                    v-model="form.side"
+                    placeholder="ваша сторона"
+                  />
+                </el-radio-group>
+              </el-form-item>
 
-          <el-form-item>Обхват талии (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.waist"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
+              <!-- _____________________________________________________________________________________________________ -->
 
-          <el-form-item
-            >Диаметр выше колена на больной стороне (Ø \ см):</el-form-item
-          >
-          <el-form-item>
-            <el-input-number
-              v-model="form.above_the_knee"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
+              <el-form-item
+                v-if="form.side !== null"
+                label="Отличается ли у вас чувствительность ног?"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp"
+              >
+                <el-radio-group v-model="form.legs_sensitivity" @change="page2">
+                  <el-radio :label="true" size="large" border>Да</el-radio>
+                  <el-radio :label="false" size="large" border>Нет</el-radio>
+                </el-radio-group>
+              </el-form-item>
 
-          <el-form-item>Обхват талии (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.below_the_knee"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
-        </div>
+              <el-form-item
+                v-if="form.side !== null"
+                label="Отличается ли у вас чувствительность рук?"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp"
+              >
+                <el-radio-group v-model="form.arms_sensitivity" @change="page2">
+                  <el-radio :label="true" size="large" border>Да</el-radio>
+                  <el-radio :label="false" size="large" border>Нет</el-radio>
+                </el-radio-group>
+              </el-form-item>
 
-        <div v-if="status_of_form == 1" class="form-send">
-          <el-form-item>
-            <div
-              style="display: flex; flex-direction: column; align-items: center"
-            >
-              <img src="/img/form2.2.1.png" class="image2" />
-              <p>Верхняя часть руки</p>
+              <el-image
+                v-if="form.side !== null"
+                class="animate__animated animate__fadeInUp"
+                style="width: 150px; height: 150px"
+                src="/img/task1/1.jpg"
+                :fit="fit"
+              />
+
+              <el-button
+                class="animate__animated animate__fadeInUp animate__delay-3s"
+                type="primary"
+                @click="page_prev"
+                >← Назад</el-button
+              >
             </div>
-          </el-form-item>
+          </el-carousel-item>
 
-          <el-form-item>Правая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.arm_top_right"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
+          <el-carousel-item class="carousel-wrapper">
+            <div class="carousel-el">
+              <p>Вехняя часть руки</p>
+              <el-form-item
+                label="Правая сторона (Ø \ см)"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-1s"
+              >
+                <el-input-number
+                  v-model="form.right_arm"
+                  :controls="false"
+                  @change="page3"
+                  placeholder="Правая сторона"
+                  size="large"
+                />
+              </el-form-item>
+              <el-form-item
+                label="Левая сторона (Ø \ см):"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-2s"
+              >
+                <el-input-number
+                  v-model="form.left_arm"
+                  :controls="false"
+                  @change="page3"
+                  placeholder="Левая сторона"
+                  size="large"
+                />
+              </el-form-item>
 
-          <el-form-item>Левая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.arm_top_left"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
+              <el-image
+                class="animate__animated animate__fadeInUp animate__delay-2s"
+                style="width: 150px; height: 150px"
+                src="/img/task1/1.jpg"
+                :fit="fit"
+              />
 
-          <el-divider />
+              <el-button
+                class="animate__animated animate__fadeInUp animate__delay-3s"
+                type="primary"
+                @click="page_prev"
+                >← Назад</el-button
+              >
+            </div>
+          </el-carousel-item>
 
-          <el-form-item>
-            <div
-              style="display: flex; flex-direction: column; align-items: center"
-            >
-              <img src="/img/form2.2.2.png" class="image2" />
+          <!-- ______________________________________________________________________-- -->
+
+          <el-carousel-item class="carousel-wrapper">
+            <div class="carousel-el">
               <p>Нижняя часть руки</p>
+              <el-form-item
+                label="Правая сторона (Ø \ см)"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-1s"
+              >
+                <el-input-number
+                  v-model="form.bot_right_arm"
+                  :controls="false"
+                  @change="page4"
+                  placeholder="Правая сторона"
+                  size="large"
+                />
+              </el-form-item>
+              <el-form-item
+                label="Левая сторона (Ø \ см):"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-2s"
+              >
+                <el-input-number
+                  v-model="form.bot_left_arm"
+                  :controls="false"
+                  @change="page4"
+                  placeholder="Левая сторона"
+                  size="large"
+                />
+              </el-form-item>
+
+              <el-form-item
+                v-if="form.bot_right_arm != null && form.bot_left_arm != null"
+                label="Имеются ли у вас вены на поврежденной руке? "
+                label-width="400px"
+                class="animate__animated animate__fadeInUp"
+              >
+                <el-radio-group v-model="form.vien_bot_arm" @change="page4">
+                  <el-radio :label="true" size="large" border>Да</el-radio>
+                  <el-radio :label="false" size="large" border>Нет</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-image
+                v-if="form.bot_right_arm != null && form.bot_left_arm != null"
+                class="animate__animated animate__fadeInUp"
+                style="width: 150px; height: 150px"
+                src="/img/task1/1.jpg"
+                :fit="fit"
+              />
+
+              <el-button
+                class="animate__animated animate__fadeInUp animate__delay-3s"
+                type="primary"
+                @click="page_prev"
+                >← Назад</el-button
+              >
             </div>
-          </el-form-item>
+          </el-carousel-item>
 
-          <el-form-item>Правая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.arm_bottom_right"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
+          <!-- ______________________________________________________________________-- -->
 
-          <el-form-item>Левая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.arm_bottom_left"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
-
-          <el-form-item>
-            Имеются ли у вас вены на поврежденной руке?
-          </el-form-item>
-          <el-form-item label="">
-            <el-radio-group v-model="form.is_veins_in_injured_arm">
-              <el-radio :label="true" size="large" border>Да</el-radio>
-              <el-radio :label="false" size="large" border>Нет</el-radio>
-            </el-radio-group>
-          </el-form-item>
-
-          <el-divider />
-
-          <el-form-item>
-            <div
-              style="display: flex; flex-direction: column; align-items: center"
-            >
-              <img src="/img/form2.2.3.png" class="image2" />
+          <el-carousel-item class="carousel-wrapper">
+            <div class="carousel-el">
               <p>Верхняя часть ноги</p>
+              <el-form-item
+                label="Правая сторона (Ø \ см)"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-1s"
+              >
+                <el-input-number
+                  v-model="form.right_leg"
+                  :controls="false"
+                  @change="page5"
+                  placeholder="Правая сторона"
+                  size="large"
+                />
+              </el-form-item>
+              <el-form-item
+                label="Левая сторона (Ø \ см):"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-2s"
+              >
+                <el-input-number
+                  v-model="form.left_leg"
+                  :controls="false"
+                  @change="page5"
+                  placeholder="Левая сторона"
+                  size="large"
+                />
+              </el-form-item>
+
+              <el-image
+                class="animate__animated animate__fadeInUp animate__delay-2s"
+                style="width: 150px; height: 150px"
+                src="/img/task1/1.jpg"
+                :fit="fit"
+              />
+
+              <el-button
+                class="animate__animated animate__fadeInUp animate__delay-3s"
+                type="primary"
+                @click="page_prev"
+                >← Назад</el-button
+              >
             </div>
-          </el-form-item>
+          </el-carousel-item>
 
-          <el-form-item>Правая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.leg_top_right"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
+          <!-- ______________________________________________________________________-- -->
 
-          <el-form-item>Левая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.leg_top_left"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
-
-          <el-divider />
-
-          <el-form-item>
-            <div
-              style="display: flex; flex-direction: column; align-items: center"
-            >
-              <img src="/img/form2.2.4.png" class="image2" />
+          <el-carousel-item class="carousel-wrapper">
+            <div class="carousel-el">
               <p>Нижняя часть ноги</p>
+              <el-form-item
+                label="Правая сторона (Ø \ см)"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-1s"
+              >
+                <el-input-number
+                  v-model="form.bot_right_leg"
+                  :controls="false"
+                  @change="page6"
+                  placeholder="Правая сторона"
+                  size="large"
+                />
+              </el-form-item>
+              <el-form-item
+                label="Левая сторона (Ø \ см):"
+                label-width="400px"
+                class="animate__animated animate__fadeInUp animate__delay-2s"
+              >
+                <el-input-number
+                  v-model="form.bot_left_leg"
+                  :controls="false"
+                  @change="page6"
+                  placeholder="Левая сторона"
+                  size="large"
+                />
+              </el-form-item>
+
+              <el-form-item
+                v-if="form.bot_right_leg != null && form.bot_left_leg != null"
+                label="Имеются ли у вас вены на поврежденной руке? "
+                label-width="400px"
+                class="animate__animated animate__fadeInUp"
+              >
+                <el-radio-group v-model="form.vien_bot_leg" @change="page6">
+                  <el-radio :label="true" size="large" border>Да</el-radio>
+                  <el-radio :label="false" size="large" border>Нет</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-image
+                v-if="form.bot_right_leg != null && form.bot_left_leg != null"
+                class="animate__animated animate__fadeInUp"
+                style="width: 150px; height: 150px"
+                src="/img/task1/1.jpg"
+                :fit="fit"
+              />
+
+              <el-button
+                class="animate__animated animate__fadeInUp animate__delay-3s"
+                type="primary"
+                @click="page_prev"
+                >← Назад</el-button
+              >
             </div>
-          </el-form-item>
-
-          <el-form-item>Правая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.leg_bottom_right"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
-
-          <el-form-item>Левая сторона (Ø \ см):</el-form-item>
-          <el-form-item>
-            <el-input-number
-              v-model="form.leg_bottom_left"
-              :controls="false"
-              placeholder="Укажите число в см"
-              size="large"
-            />
-          </el-form-item>
-
-          <el-form-item>
-            Имеются ли у вас вены на поврежденной ноге?
-          </el-form-item>
-          <el-form-item label="">
-            <el-radio-group v-model="form.is_veins_in_injured_leg">
-              <el-radio :label="true" size="large" border>Да</el-radio>
-              <el-radio :label="false" size="large" border>Нет</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </div>
-
-        <w8_form v-if="status_of_form == 2" @value="write_session" />
-
-        <el-form-item v-if="status_of_form < 2">
-          <el-button type="primary" @click="onSubmit">Продолжить</el-button>
-        </el-form-item>
-        <el-form-item v-else>
-          <el-button type="primary" @click="onSubmit"
-            >Отправить запрос на восстановление</el-button
-          >
-        </el-form-item>
+          </el-carousel-item>
+        </el-carousel>
       </el-form>
     </div>
   </div>
 </template>
 
 <script>
-import Dialog from "@/components/dialog.vue";
-import w8_form from "@/components/next_session.vue";
 export default {
   name: "FormFirst",
-  components: {
-    Dialog,
-    w8_form,
-  },
   data() {
     return {
-      next_session: 0,
-      rules: [
-        [
-          "/img/form_2_p1.png",
-          "Все измерения необходимо выполнять сидя, на расслабленное тело",
-          8,
-        ],
-        ["/img/form_2_p2.jpg", "Все измерения должны быть точными", 5],
-        [
-          "/img/form_2_p3.jpg",
-          "Все измерения должны быть производиться в системе СИ {см/кг}",
-          5,
-        ],
-      ],
+      form_is_send: false,
+      is_page_1: false,
       form: {
-        place_of_injure: "",
-        differences_of_legs: "",
-        differences_of_arms: "",
-        waist: null,
-        above_the_knee: null,
-        below_the_knee: null,
+        tall: null,
+        weight: null,
+        talia: null,
 
-        arm_top_right: "",
-        arm_top_left: "",
-        arm_bottom_right: "",
-        arm_bottom_left: "",
-        is_veins_in_injured_arm: "",
+        side: null,
+        legs_sensitivity: null,
+        arms_sensitivity: null,
 
-        leg_top_right: "",
-        leg_top_left: "",
-        leg_bottom_right: "",
-        leg_bottom_left: "",
+        right_arm: null,
+        left_arm: null,
 
-        is_veins_in_injured_leg: "",
+        bot_right_arm: null,
+        bot_left_arm: null,
+        vien_bot_arm: null,
+
+        right_leg: null,
+        left_leg: null,
+
+        bot_right_leg: null,
+        bot_left_leg: null,
+        vien_bot_leg: null,
       },
-      status_of_form: 0,
     };
   },
   methods: {
-    onSubmit: function () {
-      this.status_of_form += 1;
-      if (this.status_of_form == 3)
-        // fetch("http://localhost:5600/form2", {
-        fetch("http://localhost:5600/article_data", {
-          method: "POST", // *GET, POST, PUT, DELETE, etc.
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Private-Network": true,
-          },
-          redirect: "follow", // manual, *follow, error
-          referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify({
-            data: this.form,
-          }), // body data type must match "Content-Type" header
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            return null;
-          });
+    page1() {
+      if (this.form.tail !== null && this.form.weight !== null) {
+        if (this.form.talia !== null) this.$refs["carousel"].next();
+        else this.is_page_1 = true;
+      }
     },
-    write_session(val) {
-      this.next_session = val;
+
+    page2() {
+      if (
+        this.form.side !== null &&
+        this.form.legs_sensitivity !== null &&
+        this.form.arms_sensitivity !== null
+      ) {
+        this.$refs["carousel"].next();
+      }
+    },
+
+    page3() {
+      if (this.form.right_arm !== null && this.form.left_arm !== null) {
+        this.$refs["carousel"].next();
+      }
+    },
+
+    page4() {
+      if (
+        this.form.bot_right_arm !== null &&
+        this.form.bot_left_arm !== null &&
+        this.form.vien_bot_arm !== null
+      ) {
+        this.$refs["carousel"].next();
+      }
+    },
+
+    page5() {
+      if (this.form.right_leg !== null && this.form.left_leg !== null) {
+        this.$refs["carousel"].next();
+      }
+    },
+
+    page6() {
+      if (
+        this.form.bot_right_leg !== null &&
+        this.form.bot_left_leg !== null &&
+        this.form.vien_bot_leg !== null
+      ) {
+        this.form_is_send = true;
+      }
+    },
+
+    page_prev() {
+      this.$refs["carousel"].prev();
+    },
+    onSubmit: function () {
+      //fetch("http://localhost:5600/form_selection", {
+      fetch("http://45.91.8.150:5600/form_selection", {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Private-Network": true,
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify({
+          data: this.form,
+        }), // body data type must match "Content-Type" header
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.form_is_send = true;
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          return null;
+        });
     },
   },
 };
 </script>
 
 <style lang="scss">
-.container-form {
+.carousel-wrapper {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  text-align: center;
-}
 
-.sub_information {
-  width: 70vw;
-  margin: auto;
-  margin-bottom: 15px;
-}
-
-.form {
-  position: relative;
-  align-self: center;
-  padding: 0 3vw 0 0;
-  width: 60vw;
-  margin: auto;
+  .carousel-el {
+    width: 70vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .main-par {
@@ -374,25 +511,6 @@ export default {
   font-weight: 900;
   font-size: 70px;
   line-height: 145px;
-}
-
-.image {
-  width: 100%;
-  height: 300px;
-  display: block;
-}
-
-.image2 {
-  width: 30vw;
-  margin: 20px;
-}
-
-.bottom {
-  height: 10vh;
-  margin-top: 13px;
-  line-height: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
 }
 </style>

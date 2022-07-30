@@ -6,41 +6,23 @@ const routes = [
     component: () => import("@/routes/main.vue"),
   },
   {
-    path: "/main",
-    component: () => import("@/routes/new_main.vue"),
-  },
-  {
-    path: "/new_main",
-    component: () => import("@/routes/new_new_main.vue"),
-  },
-  {
     path: "/:lang/terms",
     component: () => import("@/routes/terms.vue"),
   },
   {
-    path: "/form_selection",
+    path: "/start",
     component: () => import("@/routes/selection.vue"),
-  },
-  {
-    path: "/new_selection",
-    component: () => import("@/routes/selection_form.vue"),
   },
   {
     path: "/form1",
     component: () => import("@/routes/first_form.vue"),
   },
-  {
-    path: "/form1_new",
-    component: () => import("@/routes/first_form_new.vue"),
-  },
+
   {
     path: "/form2",
     component: () => import("@/routes/second_form.vue"),
   },
-  {
-    path: "/form2_new",
-    component: () => import("@/routes/second_form_new.vue"),
-  },
+
   {
     path: "/task1",
     component: () => import("@/routes/tasks/task1.vue"),
