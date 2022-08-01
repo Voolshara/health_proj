@@ -1,5 +1,11 @@
 <template>
-  <div v-if="!data['Selection']">У пацианта нет инсульта</div>
+  <div v-if="!data['Selection']">
+    <p class="no-stroke-text">У пацианта нет инсульта</p>
+    <div class="no-stroke-mes">
+      <p>Сообщение:</p>
+      <p>{{ no_stroke_mes }}</p>
+    </div>
+  </div>
   <div v-else>
     <el-descriptions :column="1" border>
       <el-descriptions-item
@@ -256,6 +262,21 @@ export default {
   name: "SelectionInPanel",
   props: {
     data: JSON,
+    no_stroke_mes: String,
   },
 };
 </script>
+
+<style>
+.no-stroke-text {
+  font-size: 25px;
+  margin: 10px;
+}
+
+.no-stroke-mes {
+  font-size: 15px;
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+}
+</style>

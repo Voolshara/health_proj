@@ -792,6 +792,8 @@ export default {
         is_patient_walk_with_supports: null,
         is_knee_bend: null,
         is_knee_unbend: null,
+        //6
+        video_leg_file: "",
         // 7
         is_injured_arm_movemented: null,
         percent_of_injured_arm_movemented: null,
@@ -801,6 +803,8 @@ export default {
         is_forearm_bend: null,
         is_forearm_unbend: null,
         is_injured_finger_movemented: null,
+        // 9
+        video_arm_file: "",
         // 10
         now_year_to_repair: null,
         where_to_repair: null,
@@ -843,7 +847,10 @@ export default {
           )
             this.$refs["carousel"].next();
         } else {
-          if (this.form.problem_no_stroke !== null) this.onSubmit();
+          if (this.form.problem_no_stroke !== null) {
+            this.form_is_send = true;
+            this.onSubmit();
+          }
         }
     },
 
@@ -911,8 +918,8 @@ export default {
     },
 
     onSubmit: function () {
-      //fetch("http://localhost:5600/form_selection", {
-      fetch("http://45.91.8.150:5600/form_selection", {
+      // fetch("http://localhost:5600/selection", {
+      fetch("http://45.91.8.150:5600/selection", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

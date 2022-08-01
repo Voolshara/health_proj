@@ -66,13 +66,38 @@
         </el-table-column>
         <el-table-column label="Формы">
           <div class="all-forms-status">
-            <el-tag type="success" effect="dark" size="small" round>✔</el-tag>
-            <el-tag type="success" effect="dark" size="small" round>✔</el-tag>
-            <el-tag type="warning" effect="dark" size="small" round>✎</el-tag>
-            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
-            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
-            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
-            <el-tag type="danger" effect="dark" size="small" round>✘</el-tag>
+            <el-tag
+              class="form-status-el"
+              type="success"
+              effect="dark"
+              size="small"
+              round
+              >✔</el-tag
+            >
+            <el-tag
+              class="form-status-el"
+              type="success"
+              effect="dark"
+              size="small"
+              round
+              >✔</el-tag
+            >
+            <el-tag
+              class="form-status-el"
+              type="warning"
+              effect="dark"
+              size="small"
+              round
+              >✎</el-tag
+            >
+            <el-tag
+              class="form-status-el"
+              type="danger"
+              effect="dark"
+              size="small"
+              round
+              >✘</el-tag
+            >
           </div>
         </el-table-column>
       </el-table>
@@ -105,8 +130,8 @@ export default {
     },
   },
   mounted() {
-    // fetch("http://localhost:5600/panel/get_users", {
-    fetch("http://45.91.8.150:5600/panel/get_users", {
+    fetch("http://localhost:5600/panel/get_users", {
+      // fetch("http://45.91.8.150:5600/panel/get_users", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -141,6 +166,11 @@ export default {
 .all-forms-status {
   display: flex;
   flex-direction: row;
+  height: 25px;
+
+  .form-status-el {
+    margin: 3px;
+  }
 }
 
 .users {

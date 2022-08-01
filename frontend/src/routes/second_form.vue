@@ -1,7 +1,7 @@
 <template>
   <div class="container-form">
     <p class="main-par">Заполните анкету</p>
-    <div v-if="form_is_send" class="form-send">Форма отправлена</div>
+    <div v-if="form_is_send" class="form-send"><ReadyForm /></div>
     <div v-else>
       <el-form
         :model="form"
@@ -374,8 +374,10 @@
 </template>
 
 <script>
+import ReadyForm from "@/components/form_is_send.vue";
 export default {
   name: "FormFirst",
+  components: { ReadyForm },
   data() {
     return {
       form_is_send: false,
