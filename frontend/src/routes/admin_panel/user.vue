@@ -130,8 +130,8 @@ export default {
     };
   },
   mounted() {
-    fetch("http://localhost:5600/panel/get_user_data", {
-      // fetch("http://45.91.8.150:5600/panel/get_user_data", {
+    // fetch("http://localhost:5600/panel/get_user_data", {
+    fetch("http://45.91.8.150:5600/panel/get_user_data", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
