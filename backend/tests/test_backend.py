@@ -11,5 +11,5 @@ def test_driver():
         "stroke" : False,
         "problem_no_stroke" : "Test"
     })
-    print(out)
     assert out == 6
+

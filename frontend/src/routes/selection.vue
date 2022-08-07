@@ -1,7 +1,13 @@
 <template>
   <div class="container-form">
     <p class="main-par">Заполните анкету</p>
-    <div v-if="form_is_send" class="form-send"><ReadyForm /></div>
+    <div v-if="form_send_status == 1" class="form-w8"><div>Ждите...</div></div>
+    <div v-else-if="form_send_status == 2" class="form-send">
+      <div class="form-send-container">
+        <ReadyForm />
+        <p style="margin-bottom: 40px">Ваш пароль: {{ out_password }}</p>
+      </div>
+    </div>
     <div v-else>
       <el-form
         :model="form"
@@ -757,7 +763,8 @@ export default {
   data() {
     return {
       upload_filled: upload_filled,
-      form_is_send: false,
+      form_send_status: 0,
+      out_password: "",
 
       upload_success: {
         page1_avatar: false,
@@ -918,6 +925,7 @@ export default {
     },
 
     onSubmit: function () {
+      this.form_send_status = 1;
       // fetch("http://localhost:5600/selection", {
       fetch("http://45.91.8.150:5600/selection", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -937,6 +945,8 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+          this.out_password = data["data"]["password"];
+          this.form_send_status = 2;
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -978,6 +988,22 @@ export default {
     justify-content: center;
     align-items: center;
   }
+}
+
+.form-w8 {
+  height: 70vh;
+  font-size: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-send-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .quiz-buttons {

@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import store from "./store/index";
 import App from "./App.vue";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
@@ -18,15 +19,6 @@ app.use(ElementPlus, { locale: RuLocale });
 app.use(VueAnimateOnScroll);
 app.use(Particles);
 app.use(VueWriter);
+app.use(store);
 
 app.mount("#app");
-
-export function isValidJwt(jwt) {
-  if (!jwt || jwt.split(".").length < 3) {
-    return false;
-  }
-  const data = JSON.parse(atob(jwt.split(".")[1]));
-  const exp = new Date(data.exp * 1000); // JS deals with dates in milliseconds since epoch
-  const now = new Date();
-  return now < exp;
-}

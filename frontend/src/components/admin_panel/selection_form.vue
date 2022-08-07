@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!data['Selection']">
+  <div v-if="!render_status">
     <p class="no-stroke-text">У пацианта нет инсульта</p>
     <div class="no-stroke-mes">
       <p>Сообщение:</p>
@@ -263,6 +263,7 @@ export default {
   props: {
     data: JSON,
     no_stroke_mes: String,
+    render_status: Boolean,
   },
 };
 </script>

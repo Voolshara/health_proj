@@ -1,387 +1,440 @@
 <template>
   <div class="container-form">
-    <p class="main-par">Заполните анкету</p>
-    <div v-if="form_is_send" class="form-send"><ReadyForm /></div>
+    <Dialog v-if="!isAuthenticated" @data="write_data" />
     <div v-else>
-      <el-form
-        :model="form"
-        label-width="200px"
-        label-position="top"
-        size="large"
-        border
-      >
-        <el-carousel
-          height="70vh"
-          :autoplay="false"
-          :arrow="'never'"
-          indicator-position="none"
-          ref="carousel"
+      <p class="main-par">Заполните анкету</p>
+      <div v-if="form_is_send" class="form-send"><ReadyForm /></div>
+      <div v-else>
+        <el-form
+          :model="form"
+          label-width="200px"
+          label-position="top"
+          size="large"
+          border
         >
-          <el-carousel-item class="carousel-wrapper">
-            <div class="quiz-el">
-              <div class="head">
-                <p>Из каких вопросов вы хотите</p>
-                <p>чтобы состояла данная методика?</p>
+          <el-carousel
+            height="70vh"
+            :autoplay="false"
+            :arrow="'never'"
+            indicator-position="none"
+            ref="carousel"
+          >
+            <el-carousel-item class="carousel-wrapper">
+              <div class="quiz-el">
+                <div class="head">
+                  <p>Из каких вопросов вы хотите</p>
+                  <p>чтобы состояла данная методика?</p>
+                </div>
+                <div class="quiz-buttons">
+                  <a
+                    class="button"
+                    @click="
+                      () => {
+                        this.$refs['carousel'].next();
+                      }
+                    "
+                    >Ответить на точные вопросы (85% эффективность ,
+                    максимальное количество вопросов , от 9 минут)
+                  </a>
+                  <a
+                    class="button"
+                    @click="
+                      () => {
+                        this.$refs['carousel'].next();
+                      }
+                    "
+                    >Ответить на общие вопросы (45% эффективность , минимальное
+                    количество вопросов , до 9 минут)</a
+                  >
+                </div>
               </div>
-              <div class="quiz-buttons">
-                <a
-                  class="button"
-                  @click="
-                    () => {
-                      this.$refs['carousel'].next();
-                    }
-                  "
-                  >Ответить на точные вопросы (85% эффективность , максимальное
-                  количество вопросов , от 9 минут)
-                </a>
-                <a
-                  class="button"
-                  @click="
-                    () => {
-                      this.$refs['carousel'].next();
-                    }
-                  "
-                  >Ответить на общие вопросы (45% эффективность , минимальное
-                  количество вопросов , до 9 минут)</a
-                >
+            </el-carousel-item>
+
+            <el-carousel-item class="carousel-wrapper">
+              <div class="quiz-el">
+                <div>
+                  <el-form-item
+                    label="Имеются ли у вас сопутствующие заболевания?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
+                  >
+                    <el-radio-group
+                      v-model="form.is_have_add_ill"
+                      @change="page2_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Принимаете ли вы лекарства?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-3s"
+                  >
+                    <el-radio-group
+                      v-model="form.use_treatments"
+                      @change="page2_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Владеете ли вы какой-либо информацией о инсульте?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-4s"
+                  >
+                    <el-radio-group
+                      v-model="form.know_some_information"
+                      @change="page2_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Владеете ли вы какой-либо информацией о инсульте пациента?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-5s"
+                  >
+                    <el-radio-group
+                      v-model="form.information_about_patient"
+                      @change="page2_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-button type="primary" @click="prev">← Назад</el-button>
+                </div>
               </div>
-            </div>
-          </el-carousel-item>
+            </el-carousel-item>
 
-          <el-carousel-item class="carousel-wrapper">
-            <div class="quiz-el">
-              <div>
-                <el-form-item
-                  label="Имеются ли у вас сопутствующие заболевания?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group
-                    v-model="form.is_have_add_ill"
-                    @change="page2_next"
-                  >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+            <!-- # __________________________________________________________________________ -->
 
-                <el-form-item
-                  label="Принимаете ли вы лекарства?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-3s"
-                >
-                  <el-radio-group
-                    v-model="form.use_treatments"
-                    @change="page2_next"
+            <el-carousel-item class="carousel-wrapper">
+              <div class="quiz-el quiz-3">
+                <div class="quiz-2">
+                  <el-form-item
+                    label="Была ли у вас уже реабилитация?"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
                   >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+                    <el-radio-group
+                      v-model="form.reabilitation"
+                      @change="page3_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Владеете ли вы какой-либо информацией о инсульте?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-4s"
-                >
-                  <el-radio-group
-                    v-model="form.know_some_information"
-                    @change="page2_next"
+                  <el-form-item
+                    label="Соблюдаете ли вы диету?"
+                    class="animate__animated animate__fadeInUp animate__delay-3s"
                   >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+                    <el-radio-group v-model="form.diete" @change="page3_next">
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Владеете ли вы какой-либо информацией о инсульте пациента?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-5s"
-                >
-                  <el-radio-group
-                    v-model="form.information_about_patient"
-                    @change="page2_next"
+                  <el-form-item
+                    label="Использовали ли вы ботулинотерапию?"
+                    class="animate__animated animate__fadeInUp animate__delay-4s"
                   >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-                <el-button type="primary" @click="prev">← Назад</el-button>
+                    <el-radio-group
+                      v-model="form.botuliniteraphy"
+                      @change="page3_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Имеется ли у вас депрессия?"
+                    class="animate__animated animate__fadeInUp animate__delay-5s"
+                  >
+                    <el-radio-group
+                      v-model="form.depression"
+                      @change="page3_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-button type="primary" @click="prev">← Назад</el-button>
+                </div>
               </div>
-            </div>
-          </el-carousel-item>
+            </el-carousel-item>
 
-          <!-- # __________________________________________________________________________ -->
+            <!-- ____________________________________ -->
 
-          <el-carousel-item class="carousel-wrapper">
-            <div class="quiz-el quiz-3">
-              <div class="quiz-2">
-                <el-form-item
-                  label="Была ли у вас уже реабилитация?"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group
-                    v-model="form.reabilitation"
-                    @change="page3_next"
+            <el-carousel-item class="carousel-wrapper">
+              <div class="quiz-el">
+                <div>
+                  <el-form-item
+                    label="Были ли у вас судороги?"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
                   >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+                    <el-radio-group
+                      v-model="form.sydoragy"
+                      @change="page4_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Соблюдаете ли вы диету?"
-                  class="animate__animated animate__fadeInUp animate__delay-3s"
-                >
-                  <el-radio-group v-model="form.diete" @change="page3_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-form-item
-                  label="Использовали ли вы ботулинотерапию?"
-                  class="animate__animated animate__fadeInUp animate__delay-4s"
-                >
-                  <el-radio-group
-                    v-model="form.botuliniteraphy"
-                    @change="page3_next"
+                  <el-form-item
+                    label="Нарушена ли у вас терморегуляция"
+                    class="animate__animated animate__fadeInUp animate__delay-3s"
                   >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+                    <el-radio-group v-model="form.termo" @change="page4_next">
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Имеется ли у вас депрессия?"
-                  class="animate__animated animate__fadeInUp animate__delay-5s"
-                >
-                  <el-radio-group
-                    v-model="form.depression"
-                    @change="page3_next"
+                  <el-form-item
+                    label="Нарушена ли у вас терморегуляция"
+                    class="animate__animated animate__fadeInUp animate__delay-4s"
                   >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-                <el-button type="primary" @click="prev">← Назад</el-button>
+                    <el-radio-group
+                      v-model="form.headache"
+                      @change="page4_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-button type="primary" @click="prev">← Назад</el-button>
+                </div>
               </div>
-            </div>
-          </el-carousel-item>
+            </el-carousel-item>
 
-          <!-- ____________________________________ -->
+            <!-- ____________________________________ -->
 
-          <el-carousel-item class="carousel-wrapper">
-            <div class="quiz-el">
-              <div>
-                <el-form-item
-                  label="Были ли у вас судороги?"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group v-model="form.sydoragy" @change="page4_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-form-item
-                  label="Нарушена ли у вас терморегуляция"
-                  class="animate__animated animate__fadeInUp animate__delay-3s"
-                >
-                  <el-radio-group v-model="form.termo" @change="page4_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-form-item
-                  label="Нарушена ли у вас терморегуляция"
-                  class="animate__animated animate__fadeInUp animate__delay-4s"
-                >
-                  <el-radio-group v-model="form.headache" @change="page4_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-button type="primary" @click="prev">← Назад</el-button>
-              </div>
-            </div>
-          </el-carousel-item>
-
-          <!-- ____________________________________ -->
-
-          <el-carousel-item class="carousel-wrapper">
-            <div class="quiz-el quiz-5">
-              <div>
-                <el-form-item
-                  label="Имеется ли у вас страх от падений?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group
-                    v-model="form.fear_of_high"
-                    @change="page5_next"
+            <el-carousel-item class="carousel-wrapper">
+              <div class="quiz-el quiz-5">
+                <div>
+                  <el-form-item
+                    label="Имеется ли у вас страх от падений?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
                   >
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+                    <el-radio-group
+                      v-model="form.fear_of_high"
+                      @change="page5_next"
+                    >
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Имеется ли у вас боль?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-3s"
-                >
-                  <el-radio-group v-model="form.pain" @change="page5_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-form-item
-                  label="В каком месте болит?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-0.25s"
-                  v-if="this.form.pain === true"
-                >
-                  <el-radio-group
-                    v-model="form.type_of_pain"
-                    @change="page5_next"
+                  <el-form-item
+                    label="Имеется ли у вас боль?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-3s"
                   >
-                    <el-radio label="Поясница" size="small" border
-                      >Поясница</el-radio
-                    >
-                    <el-radio label="Стопа" size="small" border>Стопа</el-radio>
-                    <el-radio label="Плечо" size="small" border>Плечо</el-radio>
-                    <el-radio label="Колено" size="small" border
-                      >Колено</el-radio
-                    >
-                    <el-radio label="Бедро" size="small" border>Бедро</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+                    <el-radio-group v-model="form.pain" @change="page5_next">
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Разновидность боли:"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-0.5s"
-                  v-if="this.form.pain === true"
-                >
-                  <el-radio-group
-                    v-model="form.strength_of_pain"
-                    @change="page5_next"
+                  <el-form-item
+                    label="В каком месте болит?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-0.25s"
+                    v-if="this.form.pain === true"
                   >
-                    <el-radio label="Поясница" size="small" border
-                      >Поясница</el-radio
+                    <el-radio-group
+                      v-model="form.type_of_pain"
+                      @change="page5_next"
                     >
-                    <el-radio label="Стопа" size="small" border
-                      >Острая</el-radio
-                    >
-                    <el-radio label="Плечо" size="small" border
-                      >Жгучая</el-radio
-                    >
-                    <el-radio label="Колено" size="small" border
-                      >Ноющая</el-radio
-                    >
-                  </el-radio-group>
-                </el-form-item>
+                      <el-radio label="Поясница" size="small" border
+                        >Поясница</el-radio
+                      >
+                      <el-radio label="Стопа" size="small" border
+                        >Стопа</el-radio
+                      >
+                      <el-radio label="Плечо" size="small" border
+                        >Плечо</el-radio
+                      >
+                      <el-radio label="Колено" size="small" border
+                        >Колено</el-radio
+                      >
+                      <el-radio label="Бедро" size="small" border
+                        >Бедро</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Опишите свою боль:"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-0.5s"
-                  v-if="this.form.pain === true"
-                >
-                  <el-input
-                    @change="page5_next"
-                    v-model="form.pain_desc"
-                    placeholder="Опишите боль"
-                  />
-                </el-form-item>
-                <el-button type="primary" @click="prev">← Назад</el-button>
+                  <el-form-item
+                    label="Разновидность боли:"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-0.5s"
+                    v-if="this.form.pain === true"
+                  >
+                    <el-radio-group
+                      v-model="form.strength_of_pain"
+                      @change="page5_next"
+                    >
+                      <el-radio label="Поясница" size="small" border
+                        >Поясница</el-radio
+                      >
+                      <el-radio label="Стопа" size="small" border
+                        >Острая</el-radio
+                      >
+                      <el-radio label="Плечо" size="small" border
+                        >Жгучая</el-radio
+                      >
+                      <el-radio label="Колено" size="small" border
+                        >Ноющая</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Опишите свою боль:"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-0.5s"
+                    v-if="this.form.pain === true"
+                  >
+                    <el-input
+                      @change="page5_next"
+                      v-model="form.pain_desc"
+                      placeholder="Опишите боль"
+                    />
+                  </el-form-item>
+                  <el-button type="primary" @click="prev">← Назад</el-button>
+                </div>
               </div>
-            </div>
-          </el-carousel-item>
+            </el-carousel-item>
 
-          <!-- ____________________________________ -->
+            <!-- ____________________________________ -->
 
-          <el-carousel-item class="carousel-wrapper">
-            <div class="quiz-el quiz-5">
-              <div>
-                <el-form-item
-                  label="Пострадала ли у вас мимика?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group v-model="form.mimika" @change="page6_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+            <el-carousel-item class="carousel-wrapper">
+              <div class="quiz-el quiz-5">
+                <div>
+                  <el-form-item
+                    label="Пострадала ли у вас мимика?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
+                  >
+                    <el-radio-group v-model="form.mimika" @change="page6_next">
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Имеется ли у вас спастика?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group v-model="form.spastick" @change="page6_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-form-item
-                  label="Имеется ли у вас тонус?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group v-model="form.tonus" @change="page6_next">
-                    <el-radio :label="true" size="large" border>Да</el-radio>
-                    <el-radio :label="false" size="large" border>Нет</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-button type="primary" @click="prev">← Назад</el-button>
-              </div>
-            </div>
-          </el-carousel-item>
-
-          <el-carousel-item class="carousel-wrapper">
-            <div class="quiz-el quiz-6">
-              <div>
-                <el-form-item
-                  label="Когда вы хотите провести следующий этап?"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-radio-group v-model="form.mess_day" @change="page7_next">
-                    <el-radio label="Сегодня" size="large" border
-                      >Сегодня</el-radio
+                  <el-form-item
+                    label="Имеется ли у вас спастика?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
+                  >
+                    <el-radio-group
+                      v-model="form.spastick"
+                      @change="page6_next"
                     >
-                    <el-radio label="Завтра" size="large" border
-                      >Завтра</el-radio
-                    >
-                  </el-radio-group>
-                </el-form-item>
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item
-                  label="Выберете дату"
-                  label-width="400px"
-                  class="animate__animated animate__fadeInUp animate__delay-2s"
-                >
-                  <el-date-picker
-                    @change="page7_next"
-                    v-model="form.date_of_next"
-                    type="date"
-                    placeholder="Выберете дату"
-                    style="width: 100%"
-                  />
-                </el-form-item>
+                  <el-form-item
+                    label="Имеется ли у вас тонус?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
+                  >
+                    <el-radio-group v-model="form.tonus" @change="page6_next">
+                      <el-radio :label="true" size="large" border>Да</el-radio>
+                      <el-radio :label="false" size="large" border
+                        >Нет</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-button type="primary" @click="prev">← Назад</el-button>
+                </div>
               </div>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </el-form>
+            </el-carousel-item>
+
+            <el-carousel-item class="carousel-wrapper">
+              <div class="quiz-el quiz-6">
+                <div>
+                  <el-form-item
+                    label="Когда вы хотите провести следующий этап?"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
+                  >
+                    <el-radio-group
+                      v-model="form.mess_day"
+                      @change="page7_next"
+                    >
+                      <el-radio label="Сегодня" size="large" border
+                        >Сегодня</el-radio
+                      >
+                      <el-radio label="Завтра" size="large" border
+                        >Завтра</el-radio
+                      >
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item
+                    label="Выберете дату"
+                    label-width="400px"
+                    class="animate__animated animate__fadeInUp animate__delay-2s"
+                  >
+                    <el-date-picker
+                      @change="page7_next"
+                      v-model="form.date_of_next"
+                      type="date"
+                      placeholder="Выберете дату"
+                      style="width: 100%"
+                    />
+                  </el-form-item>
+                </div>
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -389,11 +442,14 @@
 <script>
 import { upload_filled } from "@element-plus/icons-vue";
 import ReadyForm from "@/components/form_is_send.vue";
+import Dialog from "@/components/dialog.vue";
 export default {
   name: "FormFirst",
-  components: { ReadyForm },
+  components: { ReadyForm, Dialog },
   data() {
     return {
+      is_auntificated: false,
+
       upload_filled: upload_filled,
       form_is_send: false,
       form: {
@@ -425,6 +481,11 @@ export default {
         date_of_next: "",
       },
     };
+  },
+  computed: {
+    isAuthenticated() {
+      return this.isAuthenticated;
+    },
   },
   methods: {
     prev() {

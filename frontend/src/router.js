@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "@/store";
 
 const routes = [
   {
@@ -16,60 +17,69 @@ const routes = [
   {
     path: "/form1",
     component: () => import("@/routes/first_form.vue"),
+    beforeEnter(to, from, next) {
+      if (!store.getters.isAuthenticated) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
 
   {
     path: "/form2",
     component: () => import("@/routes/second_form.vue"),
+    meta: { requiredAuth: true },
   },
 
   {
     path: "/task1",
     component: () => import("@/routes/tasks/task1.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/task2",
     component: () => import("@/routes/tasks/task2.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/task3",
     component: () => import("@/routes/tasks/task3.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/task4",
     component: () => import("@/routes/tasks/task4.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/task5",
     component: () => import("@/routes/tasks/task5.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/task6",
     component: () => import("@/routes/tasks/task6.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/task7",
     component: () => import("@/routes/tasks/task7.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/task8",
     component: () => import("@/routes/tasks/task8.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/login",
     component: () => import("@/routes/login.vue"),
+    meta: { requiredAuth: true },
   },
   {
     path: "/admin_panel",
     component: () => import("@/routes/admin_panel/panel.vue"),
-    /*beforeEnter: (to, from, next) => {
-      const isLoggedIn = !!Userfront.tokens.accessToken;
-      if (to.name === "Dashboard" && !isLoggedIn) {
-        return next({ path: "/login" });
-      }
-
-      next();
-    },*/
   },
   {
     path: "/admin_panel/user/:id",
@@ -85,5 +95,21 @@ const router = createRouter({
   history: createWebHistory(),
   routes, // short for `routes: routes`
 });
+
+// routeConfig.beforeEach(async (to, from, next) => {
+//   if (to.meta.requiredAuth) {
+//     var userProfile = store.getters["auth/getUserProfile"];
+//     if (userProfile.id === 0) {
+//       await store.dispatch("auth/userProfile");
+//       userProfile = store.getters["auth/getUserProfile"];
+//       if (userProfile.id === 0) {
+//         return next({ path: "/login" });
+//       } else {
+//         return next();
+//       }
+//     }
+//   }
+//   return next();
+// });
 
 export default router;

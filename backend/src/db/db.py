@@ -1,12 +1,14 @@
 import os, datetime
 import re
+from random import randint
+from werkzeug.security import generate_password_hash, check_password_hash
 from types import new_class
 import sqlalchemy as sa
 from contextlib import contextmanager
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import func
-# from werkzeug.security import generate_password_hash, check_password_hash
+from typer import Typer
 
 
 engine = sa.create_engine(
@@ -49,6 +51,7 @@ class Strokes(Base):
     is_stroked = sa.Column(sa.Boolean())
     problem_no_stroke = sa.Column(sa.String(1000))
     type_of_stroke = sa.Column(sa.Integer, sa.ForeignKey(Type_of_stroke.id))
+    is_kwon_date = sa.Column(sa.Boolean)
     date_of_stroke = sa.Column(sa.Date)
     percent_of_information = sa.Column(sa.Integer)
     is_injured_leg_movemented = sa.Column(sa.Boolean())
@@ -84,11 +87,9 @@ class Countries(Base):
     name = sa.Column(sa.String(100))
 
 
-class Users(Base):
-    __tablename__ = 'Users'
+class Users_Info(Base):
+    __tablename__ = 'Users_Info'
     id = sa.Column(sa.Integer, primary_key=True)
-    Email = sa.Column(sa.String(500))
-    Password = sa.Column(sa.String(500))
     name = sa.Column(sa.String(255))
     last_name = sa.Column(sa.String(255))
     date_of_birth = sa.Column(sa.Date)
@@ -97,6 +98,15 @@ class Users(Base):
     City = sa.Column(sa.String(100))
     Phone = sa.Column(sa.String(20))
     Stroke = sa.Column(sa.Integer, sa.ForeignKey(Strokes.id))
+
+
+class Users(Base):
+    __tablename__ = 'Users'
+    id = sa.Column(sa.Integer, primary_key=True)
+    Email = sa.Column(sa.String(500))
+    Password = sa.Column(sa.String(500))
+    Now_Token = sa.Column(sa.String(500))
+    User_Info = sa.Column(sa.Integer, sa.ForeignKey(Users_Info.id))
 
 
 class Panel():
@@ -135,9 +145,24 @@ class Panel():
             OUT["Country"] = session.query(Countries).filter(Countries.id == req.Country).one().name
             OUT["City"] = req.City
             OUT["Phone"] = req.Phone
-
             OUT["Selection_dict"] = Sel.get_data(req.Stroke)
             return OUT
+
+
+class Authentication:
+    def __init__(self):
+        pass
+
+    def check_auth(self, json_data):
+        with create_session() as session:
+            if json_data["email"] == "" or json_data["password"] == "":
+                return None
+            req = session.query(Users).filter(
+                    Users.Email == json_data['email']).one_or_none()
+            if not req or not check_password_hash(req.Password, json_data["password"]):
+                return None
+            return json_data["email"]
+            
 
 class Selection:
     def __init__(self):
@@ -150,6 +175,7 @@ class Selection:
                     "is_stroked" : req_stroke.is_stroked,
                     "problem_no_stroke" : req_stroke.problem_no_stroke,
                     "type_of_stroke" : session.query(Type_of_stroke).filter(Type_of_stroke.id == req_stroke.type_of_stroke).one().name,
+                    "is_kwon_date" : req_stroke.is_kwon_date,
                     "date_of_stroke" : req_stroke.date_of_stroke,
                     "percent_of_information" : req_stroke.percent_of_information,
                     "is_injured_leg_movemented" :  "Да" if req_stroke.is_injured_leg_movemented else "Нет",
@@ -174,6 +200,7 @@ class Selection:
                 } 
 
     def new_user(self, json_data):
+        # print(json_data)
         if not json_data['stroke']:
             stroke_id = self.without_stroke(json_data)
         else:
@@ -189,10 +216,28 @@ class Selection:
                     Genders.name == json_data["gender"]).one()
             gender_id = gender.id
 
+        user_info_id = self.add_user_inf(json_data, gender_id, country_id, stroke_id)
+        password, pass_hash = self.password()
+        
         with create_session() as session:
             session.add(Users(
                 Email = json_data["email"],
-                Password = "",
+                Password = pass_hash,
+                Now_Token = "",
+                User_Info = user_info_id
+            ))
+
+        return password
+
+    def password(self):
+        passwd = ""
+        for _ in range(8):
+            passwd += chr(randint(ord("a"), ord("z")))
+        return passwd, generate_password_hash(passwd)
+
+    def add_user_inf(self, json_data, gender_id, country_id, stroke_id):
+        with Session() as session:
+            new_info = Users_Info(
                 name = json_data["name"],
                 last_name = json_data["last_name"],
                 date_of_birth = string_to_datetime(json_data["date_of_birth"]),
@@ -201,7 +246,12 @@ class Selection:
                 City = json_data["city"],
                 Phone = json_data["phone"],
                 Stroke = stroke_id,
-            ))
+            )
+
+            session.add(new_info)
+            session.commit()
+            session_id = new_info.id
+        return session_id
 
     def with_stroke(self, data):
         with Session() as session:
@@ -211,32 +261,62 @@ class Selection:
             type_of_stroke_id = type_of_stroke.id
 
         with Session() as session:
-            new_stroke = Strokes(
-                is_stroked = False,
-                problem_no_stroke = data["problem_no_stroke"],
-                type_of_stroke = type_of_stroke_id,
-                date_of_stroke = string_to_datetime(data["date_of_stroke"]),
-                percent_of_information = int(data["percent_of_information"][:-1]),
-                is_injured_leg_movemented = data["is_injured_leg_movemented"],
-                percent_of_injured_leg_movemented = int(data["percent_of_injured_leg_movemented"][:-1]),
-                is_injured_ankle_movemented = data["is_injured_ankle_movemented"],
-                is_can_sit = data["is_can_sit"],
-                is_can_state = data["is_can_state"],
-                is_patient_walk_with_supports = data["is_patient_walk_with_supports"],
-                is_knee_bend = data["is_knee_bend"],
-                is_knee_unbend = data["is_knee_unbend"],
-                video_leg_file = data["video_leg_file"],
-                is_injured_arm_movemented = data["is_injured_arm_movemented"],
-                percent_of_injured_arm_movemented = int(data["percent_of_injured_arm_movemented"][:-1]),
-                is_elbow_bend = data["is_elbow_bend"],
-                is_elbow_unbend = data["is_elbow_unbend"],
-                is_forearm_bend = data["is_forearm_bend"],
-                is_forearm_unbend = data["is_forearm_unbend"],
-                is_injured_finger_movemented = data["is_injured_finger_movemented"],
-                video_arm_file = data["video_arm_file"],
-                now_year_to_repair = data["now_year_to_repair"],
-                where_to_repair = data["where_to_repair"]
-            )
+            if data["date_of_stroke"] == "none":
+                new_stroke = Strokes(
+                    is_stroked = True,
+                    problem_no_stroke = data["problem_no_stroke"],
+                    type_of_stroke = type_of_stroke_id,
+                    is_kwon_date = False,
+                    date_of_stroke = datetime.datetime.now(),
+                    percent_of_information = int(data["percent_of_information"][:-1]),
+                    is_injured_leg_movemented = data["is_injured_leg_movemented"],
+                    percent_of_injured_leg_movemented = int(data["percent_of_injured_leg_movemented"][:-1]) if data["percent_of_injured_leg_movemented"] is not None else 0,
+                    is_injured_ankle_movemented = data["is_injured_ankle_movemented"],
+                    is_can_sit = data["is_can_sit"],
+                    is_can_state = data["is_can_state"],
+                    is_patient_walk_with_supports = data["is_patient_walk_with_supports"],
+                    is_knee_bend = data["is_knee_bend"],
+                    is_knee_unbend = data["is_knee_unbend"],
+                    video_leg_file = data["video_leg_file"],
+                    is_injured_arm_movemented = data["is_injured_arm_movemented"],
+                    percent_of_injured_arm_movemented = int(data["percent_of_injured_arm_movemented"][:-1]) if data["percent_of_injured_arm_movemented"] is not None else 0,
+                    is_elbow_bend = data["is_elbow_bend"],
+                    is_elbow_unbend = data["is_elbow_unbend"],
+                    is_forearm_bend = data["is_forearm_bend"],
+                    is_forearm_unbend = data["is_forearm_unbend"],
+                    is_injured_finger_movemented = data["is_injured_finger_movemented"],
+                    video_arm_file = data["video_arm_file"],
+                    now_year_to_repair = data["now_year_to_repair"],
+                    where_to_repair = data["where_to_repair"]
+                )
+            else:
+                new_stroke = Strokes(
+                    is_stroked = True,
+                    problem_no_stroke = data["problem_no_stroke"],
+                    type_of_stroke = type_of_stroke_id,
+                    is_kwon_date = True,
+                    date_of_stroke = string_to_datetime(data["date_of_stroke"]),
+                    percent_of_information = int(data["percent_of_information"][:-1]),
+                    is_injured_leg_movemented = data["is_injured_leg_movemented"],
+                    percent_of_injured_leg_movemented = int(data["percent_of_injured_leg_movemented"][:-1]) if data["percent_of_injured_leg_movemented"] is not None else 0,
+                    is_injured_ankle_movemented = data["is_injured_ankle_movemented"],
+                    is_can_sit = data["is_can_sit"],
+                    is_can_state = data["is_can_state"],
+                    is_patient_walk_with_supports = data["is_patient_walk_with_supports"],
+                    is_knee_bend = data["is_knee_bend"],
+                    is_knee_unbend = data["is_knee_unbend"],
+                    video_leg_file = data["video_leg_file"],
+                    is_injured_arm_movemented = data["is_injured_arm_movemented"],
+                    percent_of_injured_arm_movemented = int(data["percent_of_injured_arm_movemented"][:-1]) if data["percent_of_injured_arm_movemented"] is not None else 0,
+                    is_elbow_bend = data["is_elbow_bend"],
+                    is_elbow_unbend = data["is_elbow_unbend"],
+                    is_forearm_bend = data["is_forearm_bend"],
+                    is_forearm_unbend = data["is_forearm_unbend"],
+                    is_injured_finger_movemented = data["is_injured_finger_movemented"],
+                    video_arm_file = data["video_arm_file"],
+                    now_year_to_repair = data["now_year_to_repair"],
+                    where_to_repair = data["where_to_repair"]
+                )
             session.add(new_stroke)
             session.commit()
             session_id = new_stroke.id

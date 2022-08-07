@@ -67,6 +67,16 @@
             >
 
             <el-descriptions-item
+              label="Город"
+              label-align="left"
+              align="center"
+              label-class-name="my-label"
+              class-name="my-content"
+              width="0"
+              >{{ data["City"] }}</el-descriptions-item
+            >
+
+            <el-descriptions-item
               label="Телефон"
               label-align="left"
               align="center"
@@ -97,7 +107,11 @@
 
         <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
           <el-tab-pane label="Отборная анкета" :name="1" class="selection">
-            <Selection :data="data" :no_stroke_mes="some_text" />
+            <Selection
+              :data="data"
+              :no_stroke_mes="some_text"
+              :render_status="is_render_selection"
+            />
           </el-tab-pane>
           <el-tab-pane label="Первая форма" :name="2"
             >Пока ещё не готово (</el-tab-pane
@@ -127,11 +141,12 @@ export default {
       is_been_stroke: "",
       activeTab: 1,
       some_text: "",
+      is_render_selection: false,
     };
   },
   mounted() {
-    // fetch("http://localhost:5600/panel/get_user_data", {
-    fetch("http://45.91.8.150:5600/panel/get_user_data", {
+    fetch("http://localhost:5600/panel/get_user_data", {
+      // fetch("http://45.91.8.150:5600/panel/get_user_data", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -150,6 +165,10 @@ export default {
       .then((data) => {
         this.data = data["data"];
         this.some_text = this.data["Selection_dict"]["problem_no_strokes"];
+        this.is_been_stroke = this.data["Selection_dict"]["is_stroked"]
+          ? "Да"
+          : "Нет";
+        this.is_render_selection = this.data["Selection_dict"]["is_stroked"];
       })
       .catch(() => {});
   },
