@@ -1,6 +1,5 @@
 <template>
   <div class="container-form">
-    <Dialog v-if="panel_data === null" @data="write_data" />
     <p class="main-par">Задание 1</p>
     <p class="sub_information" style="font-size: 20px">
       Индивидуальная подборка мышц Данное движение необходимо совершить пациенту
@@ -126,13 +125,11 @@
 </template>
 
 <script>
-import Dialog from "@/components/dialog.vue";
 import UserBar from "@/components/user_bar.vue";
 import BottomSlider from "@/components/bottom_slider.vue";
 export default {
   name: "FormFirst",
   components: {
-    Dialog,
     BottomSlider,
     UserBar,
   },

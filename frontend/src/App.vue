@@ -4,7 +4,6 @@
   <el-button
     :icon="ChatLineRound"
     circle
-    v-if="type_problem !== null"
     @click="drawer_mini = true"
     class="bot-invoker"
     type="success"
@@ -32,7 +31,6 @@
   <el-button
     :icon="ChatLineRound"
     circle
-    v-if="type_problem !== null"
     @click="drawer_max = true"
     class="hard-bot-invoker"
     type="warning"

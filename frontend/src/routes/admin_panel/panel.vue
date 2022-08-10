@@ -130,6 +130,7 @@ export default {
     },
   },
   mounted() {
+    
     fetch("http://localhost:5600/panel/get_users", {
       // fetch("http://45.91.8.150:5600/panel/get_users", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.

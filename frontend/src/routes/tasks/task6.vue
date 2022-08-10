@@ -1,6 +1,5 @@
 <template>
   <div class="container-form">
-    <Dialog />
     <p class="main-par">Задание 6</p>
     <p class="sub_information" style="font-size: 20px">
       Данное движение необходимо совершить пациенту с максимальной силой (на
@@ -118,12 +117,10 @@
 </template>
 
 <script>
-import Dialog from "@/components/dialog.vue";
 import BottomSlider from "@/components/bottom_slider.vue";
 export default {
   name: "FormFirst",
   components: {
-    Dialog,
     BottomSlider,
   },
   data() {

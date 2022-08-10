@@ -1,6 +1,6 @@
 <template>
   <div class="container-form">
-    <Dialog v-if="!isAuthenticated" @data="write_data" />
+    <Dialog v-if="!true" @data="write_data" />
     <div v-else>
       <p class="main-par">Заполните анкету</p>
       <div v-if="form_is_send" class="form-send"><ReadyForm /></div>
@@ -448,7 +448,7 @@ export default {
   components: { ReadyForm, Dialog },
   data() {
     return {
-      is_auntificated: false,
+      is_auntificated: true,
 
       upload_filled: upload_filled,
       form_is_send: false,

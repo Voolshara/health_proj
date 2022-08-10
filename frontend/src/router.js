@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from "@/store";
 
 const routes = [
   {
@@ -15,10 +14,21 @@ const routes = [
     component: () => import("@/routes/selection.vue"),
   },
   {
+    path: "/profile",
+    component: () => import("@/routes/profile.vue"),
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
+  },
+  {
     path: "/form1",
     component: () => import("@/routes/first_form.vue"),
     beforeEnter(to, from, next) {
-      if (!store.getters.isAuthenticated) {
+      if (!localStorage.getItem("user")) {
         next("/login");
       } else {
         next();
@@ -30,47 +40,110 @@ const routes = [
     path: "/form2",
     component: () => import("@/routes/second_form.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
 
   {
     path: "/task1",
     component: () => import("@/routes/tasks/task1.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/task2",
     component: () => import("@/routes/tasks/task2.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/task3",
     component: () => import("@/routes/tasks/task3.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/task4",
     component: () => import("@/routes/tasks/task4.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/task5",
     component: () => import("@/routes/tasks/task5.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/task6",
     component: () => import("@/routes/tasks/task6.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/task7",
     component: () => import("@/routes/tasks/task7.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/task8",
     component: () => import("@/routes/tasks/task8.vue"),
     meta: { requiredAuth: true },
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem("user")) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/login",

@@ -5,7 +5,7 @@ from src.db.db import Selection, Panel, Authentication
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import datetime, timedelta
-import jwt
+import jwt, os
 
 
 runner = Typer()
@@ -16,13 +16,15 @@ Auth = Authentication()
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(40)
+
 CORS(app, resources={
     r"/selection": {"origins": "*"},
     r"/upload_avater": {"origins": "*"},
     r"/check_panel" : {"origins": "*"},
     r"/panel/get_users" : {"origins": "*"},
     r"/panel/get_user_data" : {"origins": "*"},
-    r"/login" : {"origins": "*"},
+    r"/api/auth/*" : {"origins": "*"},
     }) # настройка CORS POLICY
 app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 
@@ -48,10 +50,9 @@ def get_user_data():
     return {"status": "success", "data": Pan.one_user(request.json["user_id"])}
 
 
-@app.route('/login', methods=('POST',))
+@app.route('/api/auth/signin', methods=('POST',))
 def login():
-    data = request.get_json()
-    user_email = Auth.check_auth(**data)
+    user_email = Auth.check_auth(request.get_json())
 
     if not user_email:
         return { 'message': 'Проверьте данные', 'authenticated': False }, 401
@@ -60,8 +61,10 @@ def login():
         'sub': user_email,
         'iat':datetime.utcnow(),
         'exp': datetime.utcnow() + timedelta(minutes=30)},
-        current_app.config['SECRET_KEY'])
-    return { 'token': token.decode('UTF-8'), 'authenticated': False }
+        current_app.config['SECRET_KEY'],
+        algorithm="HS256")
+
+    return { 'token': token, 'authenticated': False}
 
 
 # @app.route('/check_email', methods=['POST'])  # роут сборки шаблонов
