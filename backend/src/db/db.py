@@ -87,6 +87,11 @@ class Countries(Base):
     name = sa.Column(sa.String(100))
 
 
+class Form1(Base):
+    __tablename__ = 'Form1'
+    id = sa.Column(sa.Integer, primary_key=True)
+
+
 class Users_Info(Base):
     __tablename__ = 'Users_Info'
     id = sa.Column(sa.Integer, primary_key=True)
@@ -118,35 +123,38 @@ class Panel():
             req = session.query(Users).all()
             OUT = []
             for user in req:
-                OUT.append([
-                    user.name, 
-                    user.last_name, 
-                    "М" if user.gender == 1 else "Ж", 
-                    session.query(Countries).filter(
-                    Countries.id == user.Country).one().name,
-                    True if user.Stroke is not None else False,
-                    user.id,
-                    user.date_of_birth
-                ])
+                with create_session() as session:
+                    req_user_data = session.query(Users_Info).filter(Users_Info.id == user.User_Info).one()
+                    OUT.append([
+                        req_user_data.name, 
+                        req_user_data.last_name, 
+                        "М" if req_user_data.gender == 1 else "Ж", 
+                        session.query(Countries).filter(
+                        Countries.id == req_user_data.Country).one().name,
+                        True if req_user_data.Stroke is not None else False,
+                        req_user_data.id,
+                        req_user_data.date_of_birth
+                    ])
             return OUT
     
     def one_user(self, user_id):
         Sel = Selection()
-
         with create_session() as session:
             OUT = {}
             req = session.query(Users).filter(Users.id == user_id).one()
-            OUT["id"] = req.id
-            OUT["email"] = req.Email
-            OUT["name"] = req.name
-            OUT["last_name"] = req.last_name
-            OUT["date_of_birth"] = req.date_of_birth
-            OUT["gender"] = session.query(Genders).filter(Genders.id == req.gender).one().name
-            OUT["Country"] = session.query(Countries).filter(Countries.id == req.Country).one().name
-            OUT["City"] = req.City
-            OUT["Phone"] = req.Phone
-            OUT["Selection_dict"] = Sel.get_data(req.Stroke)
-            return OUT
+            with create_session() as session:
+                req_user_data = session.query(Users_Info).filter(Users_Info.id == req.User_Info).one()
+                OUT["id"] = req_user_data.id
+                OUT["email"] = req.Email
+                OUT["name"] = req_user_data.name
+                OUT["last_name"] = req_user_data.last_name
+                OUT["date_of_birth"] = req_user_data.date_of_birth
+                OUT["gender"] = session.query(Genders).filter(Genders.id == req_user_data.gender).one().name
+                OUT["Country"] = session.query(Countries).filter(Countries.id == req_user_data.Country).one().name
+                OUT["City"] = req_user_data.City
+                OUT["Phone"] = req_user_data.Phone
+                OUT["Selection_dict"] = Sel.get_data(req_user_data.Stroke)
+                return OUT
 
 
 class Authentication:
@@ -162,6 +170,14 @@ class Authentication:
             if not req or not check_password_hash(req.Password, json_data["password"]):
                 return None
             return json_data["email"]
+
+
+class First_Form:
+    def __init__(self):
+        pass
+
+    def new_data(self, json_data):
+        print(json_data)
             
 
 class Selection:
@@ -220,18 +236,29 @@ class Selection:
         password, pass_hash = self.password()
         
         with create_session() as session:
-            session.add(Users(
-                Email = json_data["email"],
-                Password = pass_hash,
-                Now_Token = "",
-                User_Info = user_info_id
-            ))
-
+            old_record = session.query(Users).filter(
+                    Users.Email == json_data["email"]).one_or_none()
+            if old_record is None:
+                session.add(Users(
+                    Email = json_data["email"],
+                    Password = pass_hash,
+                    Now_Token = "",
+                    User_Info = user_info_id
+                ))
+            else:
+                session.query(Users).filter(Users.id == old_record.id).update(
+                    {
+                        Users.Email: json_data["email"],
+                        Users.Password: pass_hash,
+                        Users.Now_Token: "",
+                        Users.User_Info: user_info_id,
+                    }
+                    )
         return password
 
     def password(self):
         passwd = ""
-        for _ in range(8):
+        for _ in range(10):
             passwd += chr(randint(ord("a"), ord("z")))
         return passwd, generate_password_hash(passwd)
 

@@ -2,6 +2,12 @@
   <div class="container-form">
     <p class="main-par">Заполните анкету</p>
     <div v-if="form_send_status == 1" class="form-w8"><div>Ждите...</div></div>
+    <div v-if="form_send_status == -1" class="form-w8">
+      <div>Ошибка. Попробуйте ещё раз</div>
+      <div class="quiz-buttons">
+        <el-button type="primary" @click="onSubmit">Отправить заново</el-button>
+      </div>
+    </div>
     <div v-else-if="form_send_status == 2" class="form-send">
       <div class="form-send-container">
         <ReadyForm />
@@ -926,8 +932,8 @@ export default {
 
     onSubmit: function () {
       this.form_send_status = 1;
-      // fetch("http://localhost:5600/selection", {
-      fetch("http://45.91.8.150:5600/selection", {
+      fetch("http://localhost:5600/selection", {
+        // fetch("http://45.91.8.150:5600/selection", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

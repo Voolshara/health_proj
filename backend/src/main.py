@@ -1,7 +1,7 @@
 from flask import Flask, request, current_app
 from flask_cors import CORS
 from typer import Typer 
-from src.db.db import Selection, Panel, Authentication
+from src.db.db import Selection, Panel, Authentication, First_Form
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import datetime, timedelta
@@ -12,6 +12,7 @@ runner = Typer()
 
 Sel = Selection()
 Pan = Panel()
+FiF = First_Form()
 Auth = Authentication()
 
 
@@ -30,12 +31,22 @@ app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 
 
 @app.route('/selection', methods=['POST'])  # роут сборки шаблонов
-def form1():
+def form_sel():
     passwd = Sel.new_user(request.json["data"])
     return {
         "status": "success", 
         "data" : {
             "password": passwd
+            }
+        }
+
+@app.route('/first_form', methods=['POST'])  # роут сборки шаблонов
+def form1():
+    FiF.new_data(request.json["data"])
+    return {
+        "status": "success", 
+        "data" : {
+            
             }
         }
 
