@@ -21,6 +21,8 @@ app.config['SECRET_KEY'] = os.urandom(40)
 
 CORS(app, resources={
     r"/selection": {"origins": "*"},
+    r"/first_form": {"origins": "*"},
+
     r"/upload_avater": {"origins": "*"},
     r"/check_panel" : {"origins": "*"},
     r"/panel/get_users" : {"origins": "*"},
@@ -42,7 +44,7 @@ def form_sel():
 
 @app.route('/first_form', methods=['POST'])  # роут сборки шаблонов
 def form1():
-    FiF.new_data(request.json["data"])
+    FiF.new_data(request.json)
     return {
         "status": "success", 
         "data" : {

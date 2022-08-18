@@ -1,5 +1,6 @@
 <template>
   <div class="container-form">
+    {{ localStorage.getItem("user") }}
     <Dialog v-if="!true" @data="write_data" />
     <div v-else>
       <p class="main-par">Заполните анкету</p>
@@ -453,32 +454,32 @@ export default {
       upload_filled: upload_filled,
       form_is_send: false,
       form: {
-        is_have_add_ill: "",
-        use_treatments: "",
-        know_some_information: "",
-        information_about_patient: "",
+        is_have_add_ill: null,
+        use_treatments: null,
+        know_some_information: null,
+        information_about_patient: null,
 
-        reabilitation: "",
-        diete: "",
-        botuliniteraphy: "",
-        depression: "",
+        reabilitation: null,
+        diete: null,
+        botuliniteraphy: null,
+        depression: null,
 
-        sydoragy: "",
-        termo: "",
-        headache: "",
+        sydoragy: null,
+        termo: null,
+        headache: null,
 
-        fear_of_high: "",
-        pain: "",
-        type_of_pain: "",
-        strength_of_pain: "",
-        pain_desc: "",
+        fear_of_high: null,
+        pain: null,
+        type_of_pain: null,
+        strength_of_pain: null,
+        pain_desc: null,
 
-        mimika: "",
-        spastick: "",
-        tonus: "",
+        mimika: null,
+        spastick: null,
+        tonus: null,
 
-        mess_day: "",
-        date_of_next: "",
+        mess_day: null,
+        date_of_next: null,
       },
     };
   },
@@ -494,53 +495,53 @@ export default {
 
     page2_next() {
       if (
-        this.form.is_have_add_ill !== "" &&
-        this.form.use_treatments !== "" &&
-        this.form.know_some_information !== "" &&
-        this.form.information_about_patient !== ""
+        this.form.is_have_add_ill !== null &&
+        this.form.use_treatments !== null &&
+        this.form.know_some_information !== null &&
+        this.form.information_about_patient !== null
       )
         this.$refs["carousel"].next();
     },
 
     page3_next() {
       if (
-        this.form.reabilitation !== "" &&
-        this.form.diete !== "" &&
-        this.form.botuliniteraphy !== "" &&
-        this.form.depression !== ""
+        this.form.reabilitation !== null &&
+        this.form.diete !== null &&
+        this.form.botuliniteraphy !== null &&
+        this.form.depression !== null
       )
         this.$refs["carousel"].next();
     },
     page4_next() {
       if (
-        this.form.sydoragy !== "" &&
-        this.form.termo !== "" &&
-        this.form.headache !== ""
+        this.form.sydoragy !== null &&
+        this.form.termo !== null &&
+        this.form.headache !== null
       )
         this.$refs["carousel"].next();
     },
     page5_next() {
       if (
-        this.form.fear_of_high !== "" &&
+        this.form.fear_of_high !== null &&
         (this.form.pain == false ||
-          (this.form.type_of_pain !== "" &&
-            this.form.strength_of_pain !== "" &&
-            this.form.pain_desc !== ""))
+          (this.form.type_of_pain !== null &&
+            this.form.strength_of_pain !== null &&
+            this.form.pain_desc !== null))
       )
         this.$refs["carousel"].next();
     },
     page6_next() {
       if (
-        this.form.spastick !== "" &&
-        this.form.tonus !== "" &&
-        this.form.mimika !== ""
+        this.form.spastick !== null &&
+        this.form.tonus !== null &&
+        this.form.mimika !== null
       )
         this.$refs["carousel"].next();
     },
 
     page7_next() {
-      if (this.form.mess_day !== "" && this.form.date_of_next !== "")
-        this.form_is_send = true;
+      if (this.form.mess_day !== null && this.form.date_of_next !== null)
+        this.onSubmit();
     },
 
     onSubmit: function () {
@@ -558,6 +559,7 @@ export default {
         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         body: JSON.stringify({
           data: this.form,
+          token: localStorage.getItem("user"),
         }), // body data type must match "Content-Type" header
       })
         .then((response) => response.json())

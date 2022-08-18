@@ -90,6 +90,27 @@ class Countries(Base):
 class Form1(Base):
     __tablename__ = 'Form1'
     id = sa.Column(sa.Integer, primary_key=True)
+    is_have_add_ill = sa.Column(sa.Boolean())
+    use_treatments = sa.Column(sa.Boolean())
+    know_some_information = sa.Column(sa.Boolean())
+    information_about_patient = sa.Column(sa.Boolean())
+    reabilitation = sa.Column(sa.Boolean())
+    diete = sa.Column(sa.Boolean())
+    botuliniteraphy = sa.Column(sa.Boolean())
+    depression = sa.Column(sa.Boolean())
+    sydoragy = sa.Column(sa.Boolean())
+    termo = sa.Column(sa.Boolean())
+    headace = sa.Column(sa.Boolean())
+    fear_of_high = sa.Column(sa.Boolean())
+    pain = sa.Column(sa.Boolean())
+    type_of_pain = sa.Column(sa.Boolean())
+    strength_of_pain = sa.Column(sa.String(100))
+    pain_desc = sa.Column(sa.String(100))
+    mimika = sa.Column(sa.Boolean())
+    spastick = sa.Column(sa.Boolean())
+    tonus = sa.Column(sa.Boolean())
+    mess_day = sa.Column(sa.String(100)) 
+    date_of_next = sa.Column(sa.Date)
 
 
 class Users_Info(Base):
@@ -103,6 +124,9 @@ class Users_Info(Base):
     City = sa.Column(sa.String(100))
     Phone = sa.Column(sa.String(20))
     Stroke = sa.Column(sa.Integer, sa.ForeignKey(Strokes.id))
+    Form1 = sa.Column(sa.Integer)
+    Form2 = sa.Column(sa.Integer)
+    Tasks = sa.Column(sa.Integer)
 
 
 class Users(Base):
@@ -177,7 +201,30 @@ class First_Form:
         pass
 
     def new_data(self, json_data):
+
         print(json_data)
+    #      is_have_add_ill': False 
+    # use_treatments': True, 
+    # know_some_information': False, 
+    # information_about_patient': True, 
+    # reabilitation': False, 
+    # diete': True, 
+    # botuliniteraphy': False, 
+    # depression': True, 
+    # sydoragy': False, 
+    # termo': False, 
+    # headace': True, 
+    # fear_of_high': False, 
+    # pain': True, 
+    # type_of_pain': 'Стопа', 
+    # strength_of_pain': 'Плечо', 
+    # pain_desc': 'gffgfgb', 
+    # mimika': False, 
+    # spastick': True, 
+    # tonus': True, 
+    # mess_day': 'Сегодня', 
+    # date_of_next': '2022-08-08T21:00:00.000Z
+
             
 
 class Selection:
